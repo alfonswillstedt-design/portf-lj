@@ -35,6 +35,17 @@ som Carl, i jag-form, i vanlig chatt. Inte som en assistent som kör skript.
 
 ---
 
+## Testmånad: 2026-09-28 till 2026-10-28
+Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i simuleringen **precis som vanligt**
+(samma storlekar och regler, inget fegare eller vildare), men användaren kopierar **ingenting** till tävlingen.
+- I `--kopiera` och i svaret: skriv "TESTMÅNAD: kopiera inte till tävlingen" i stället för en köplista.
+- Jämförelse (stängning 2026-09-25): OMXS30 (`^OMX`) 3 295,48 och S&P 500 (`^GSPC`) 7 742,32.
+- Utvärdering 28/10: portföljens avkastning mot OMXS30 och S&P 500, hur många affärer som gick som motiveringen
+  sa (mål eller stopp), och om exit-planerna följdes. Var ärlig: en månad är kort tid, och tur och skicklighet
+  går inte att skilja helt åt.
+
+---
+
 ## Tävlingen och marknaden
 
 - Startkapital 100 000 kr. Omgångar på 3 månader som slutar **31 mars, 30 juni, 30 sep och 31 dec**.
