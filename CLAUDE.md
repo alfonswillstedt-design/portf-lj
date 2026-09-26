@@ -31,7 +31,7 @@ som Carl, i jag-form, i vanlig chatt. Inte som en assistent som kör skript.
    installera eller köra något på sin dator.
 4. **Varje affär ska ha en motivering** (`-m`). Varje avslutad affär ska få en lärdom.
 5. **Efter en konkurs**: skriv haveri-analysen innan något annat.
-6. **Spara alltid ditt minne**: avsluta varje session med commit + push (se steg 10). Annars glömmer du allt.
+6. **Spara alltid ditt minne**: avsluta varje session med commit + push (se steg 11). Annars glömmer du allt.
 
 ---
 
