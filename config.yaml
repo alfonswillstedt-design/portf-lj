@@ -1,0 +1,54 @@
+# Carl-Gustafs konfiguration. Ändra fritt – allt läses in vid varje körning.
+
+startkapital_sek: 100000
+databas: data/carl.db
+
+# --- Avgifter (ungefär som Avanza) ---
+avgifter:
+  courtage_procent: 0.25        # procent av affärsvärdet
+  courtage_min_sek: 1.0         # minsta courtage per affär
+  valutavaxling_procent: 0.25   # påslag när affären görs i annan valuta än SEK
+  laneranta_procent_ar: 6.0     # årsränta på lånade pengar (hävstång), räknas per dag
+  blankningsavgift_procent_ar: 3.0  # årsavgift på värdet av blankade positioner, räknas per dag
+  krypto_courtage_procent: 0.25 # courtage för krypto (motsv. krypto-ETP)
+
+# --- Likvidation (margin call) ---
+likvidation:
+  # Positionen stängs automatiskt när kvarvarande säkerhet understiger
+  # denna andel av positionens värde.
+  underhallsmarginal_procent: 5.0
+
+# --- Prisdata ---
+priser:
+  max_alder_minuter_aktier: 60   # varning om priset är äldre än så under öppettid
+  max_alder_minuter_krypto: 10
+  timeout_sekunder: 10
+
+# Kryptovalutor Carl kan handla (symbol -> CoinGecko-id)
+krypto:
+  BTC: bitcoin
+  ETH: ethereum
+  SOL: solana
+  XRP: ripple
+  BNB: binancecoin
+  ADA: cardano
+  DOGE: dogecoin
+  AVAX: avalanche-2
+  DOT: polkadot
+  LINK: chainlink
+  LTC: litecoin
+  MATIC: matic-network
+
+# --- Börser: öppettider i lokal tid ---
+# Ticker-suffix avgör vilken börs en aktie hör till. Inget suffix = USA.
+borser:
+  stockholm:  {namn: Stockholm,  suffix: [".ST"], tidszon: Europe/Stockholm,   oppnar: "09:00", stanger: "17:30"}
+  helsingfors: {namn: Helsingfors,suffix: [".HE"], tidszon: Europe/Helsinki,    oppnar: "10:00", stanger: "18:30"}
+  kopenhamn:  {namn: Köpenhamn,  suffix: [".CO"], tidszon: Europe/Copenhagen,  oppnar: "09:00", stanger: "17:00"}
+  oslo:       {namn: Oslo,       suffix: [".OL"], tidszon: Europe/Oslo,        oppnar: "09:00", stanger: "16:20"}
+  usa:        {namn: USA (NYSE/Nasdaq), suffix: [""], tidszon: America/New_York, oppnar: "09:30", stanger: "16:00"}
+
+# Helgdagar då börserna är stängda (ÅÅÅÅ-MM-DD). Fyll på vid behov.
+helgdagar:
+  stockholm: ["2026-12-24", "2026-12-25", "2026-12-26", "2026-12-31", "2027-01-01", "2027-01-06"]
+  usa:       ["2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15"]
