@@ -14,7 +14,7 @@ def utc(s):  # svensk tid -> UTC (sommartid +2, vintertid +1 hanteras av zoneinf
 
 @pytest.mark.parametrize("ticker,borse", [
     ("VOLV-B.ST", "stockholm"), ("NOKIA.HE", "helsingfors"), ("NOVO-B.CO", "kopenhamn"),
-    ("EQNR.OL", "oslo"), ("AAPL", "usa"), ("BTC", "krypto"), ("eth-usd", "krypto"),
+    ("EQNR.OL", "oslo"), ("AAPL", "usa"), ("BITCOIN-XBT.ST", "stockholm"),
 ])
 def test_exchange_for(ticker, borse):
     assert markets.exchange_for(ticker) == borse
@@ -42,10 +42,6 @@ def test_usa_oppettider_i_svensk_tid():
     assert markets.is_open("AAPL", utc("2027-03-15T14:30"))
 
 
-def test_krypto_alltid_oppet():
-    assert markets.is_open("BTC", utc("2026-09-26T03:00"))
-
-
 def test_nasta_oppning_efter_helg():
     s = markets.status("stockholm", utc("2026-09-26T12:00"))
     assert not s.oppen and s.nasta_oppning.isoformat().startswith("2026-09-28T09:00")
@@ -57,22 +53,12 @@ def fake_quote(ticker, pris, valuta):
     return prices.Quote(ticker, pris, valuta, datetime.now(timezone.utc), "test")
 
 
-def test_krypto_reserv_coingecko(monkeypatch):
-    def binance_nere(sym):
-        raise ConnectionError("nere")
-    monkeypatch.setattr(prices, "fetch_binance", binance_nere)
-    monkeypatch.setattr(prices, "fetch_coingecko", lambda s: fake_quote(s, 65000.0, "USD"))
-    q = prices.get_quote("btc-usd")
-    assert q.ticker == "BTC" and q.pris == 65000.0 and q.kalla == "test"
-
-
 def test_inget_pris_ger_fel_aldrig_pahittat(monkeypatch):
-    def nere(sym):
-        raise ConnectionError("nere")
-    monkeypatch.setattr(prices, "fetch_binance", nere)
-    monkeypatch.setattr(prices, "fetch_coingecko", nere)
+    def nere(t):
+        raise prices.PriceError("nere")
+    monkeypatch.setattr(prices, "fetch_yahoo", nere)
     with pytest.raises(prices.PriceError):
-        prices.get_quote("BTC")
+        prices.get_quote("AAPL")
 
 
 def test_omrakning_till_sek(monkeypatch):

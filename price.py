@@ -1,6 +1,6 @@
 """Hämta priser.
 
-  python price.py VOLV-B.ST AAPL BTC     # ett eller flera priser, även i SEK
+  python price.py VOLV-B.ST AAPL BITCOIN-XBT.ST    # ett eller flera priser, även i SEK
   python price.py fx USD EUR             # valutakurser mot SEK
   python price.py test                   # testar alla datakällor
 """
@@ -38,8 +38,8 @@ def main(args: list[str]) -> int:
                 ok = False
         return 0 if ok else 2
     if args[0] == "test":
-        args = ["VOLV-B.ST", "ERIC-B.ST", "NOKIA.HE", "AAPL", "NVDA", "BTC", "ETH"]
-        print("Testar datakällor (Yahoo, Binance/CoinGecko):")
+        args = ["VOLV-B.ST", "ERIC-B.ST", "NOKIA.HE", "AAPL", "NVDA", "BITCOIN-XBT.ST"]
+        print("Testar datakällor (Yahoo Finance):")
     with db.session() as conn:
         db.init(conn)
         results = [show(t, conn) for t in args]

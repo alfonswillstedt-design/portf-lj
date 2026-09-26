@@ -10,7 +10,6 @@ avgifter:
   valutavaxling_procent: 0.25   # påslag när affären görs i annan valuta än SEK
   laneranta_procent_ar: 6.0     # årsränta på lånade pengar (hävstång), räknas per dag
   blankningsavgift_procent_ar: 3.0  # årsavgift på värdet av blankade positioner, räknas per dag
-  krypto_courtage_procent: 0.25 # courtage för krypto (motsv. krypto-ETP)
 
 # --- Likvidation (margin call) ---
 likvidation:
@@ -18,26 +17,24 @@ likvidation:
   # denna andel av positionens värde.
   underhallsmarginal_procent: 5.0
 
+# --- Konkurs ---
+# Om det totala kontovärdet faller under denna gräns räknas det som konkurs
+# (med så lite pengar går det inte längre att handla vettigt).
+konkursgrans_sek: 100
+
 # --- Prisdata ---
 priser:
   max_alder_minuter_aktier: 60   # varning om priset är äldre än så under öppettid
-  max_alder_minuter_krypto: 10
   timeout_sekunder: 10
 
-# Kryptovalutor Carl kan handla (symbol -> CoinGecko-id)
-krypto:
-  BTC: bitcoin
-  ETH: ethereum
-  SOL: solana
-  XRP: ripple
-  BNB: binancecoin
-  ADA: cardano
-  DOGE: dogecoin
-  AVAX: avalanche-2
-  DOT: polkadot
-  LINK: chainlink
-  LTC: litecoin
-  MATIC: matic-network
+# Krypto handlas BARA via ETP:er på Stockholmsbörsen (som vanliga aktier), precis som
+# i tävlingen. Exempel på tickers (fler kan finnas – sök med price.py):
+krypto_etp:
+  BITCOIN-XBT.ST: Bitcoin Tracker One (SEK)
+  ETHEREUM-XBT.ST: Ether Tracker One (SEK)
+  VALOUR-BTC-0-SEK.ST: Valour Bitcoin Zero (SEK)
+  VALOUR-ETH-0-SEK.ST: Valour Ethereum Zero (SEK)
+  VALOUR-SOL-SEK.ST: Valour Solana (SEK)
 
 # --- Börser: öppettider i lokal tid ---
 # Ticker-suffix avgör vilken börs en aktie hör till. Inget suffix = USA.

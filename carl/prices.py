@@ -3,10 +3,7 @@ hämta kastas PriceError och då blir det ingen affär."""
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-import requests
-
 from . import config
-from .markets import crypto_symbol
 
 
 class PriceError(Exception):
@@ -76,48 +73,10 @@ def fetch_yahoo(ticker: str) -> Quote:
     return Quote(ticker.upper(), pris, valuta.upper(), pristid, "yahoo")
 
 
-# ---------- Krypto via Binance, reserv CoinGecko ----------
-
-def fetch_binance(sym: str) -> Quote:
-    r = requests.get("https://api.binance.com/api/v3/ticker/24hr",
-                     params={"symbol": f"{sym}USDT"}, timeout=_timeout())
-    r.raise_for_status()
-    d = r.json()
-    pris = float(d["lastPrice"])
-    pristid = datetime.fromtimestamp(int(d["closeTime"]) / 1000, timezone.utc)
-    return Quote(sym, pris, "USD", pristid, "binance")
-
-
-def fetch_coingecko(sym: str) -> Quote:
-    cg_id = config.load()["krypto"][sym]
-    r = requests.get("https://api.coingecko.com/api/v3/simple/price",
-                     params={"ids": cg_id, "vs_currencies": "usd", "include_last_updated_at": "true"},
-                     timeout=_timeout())
-    r.raise_for_status()
-    d = r.json()[cg_id]
-    return Quote(sym, float(d["usd"]), "USD",
-                 datetime.fromtimestamp(int(d["last_updated_at"]), timezone.utc), "coingecko")
-
-
-def fetch_crypto(sym: str) -> Quote:
-    fel = []
-    for f in (fetch_binance, fetch_coingecko):
-        try:
-            q = f(sym)
-            if q.pris > 0:
-                return q
-        except Exception as e:
-            fel.append(f"{f.__name__}: {e}")
-    raise PriceError(f"Kunde inte hämta krypto {sym}: " + " | ".join(fel))
-
-
 # ---------- Publikt API ----------
 
 def get_quote(ticker: str) -> Quote:
     """Pris i instrumentets egen valuta."""
-    sym = crypto_symbol(ticker)
-    if sym:
-        return fetch_crypto(sym)
     return fetch_yahoo(ticker.upper())
 
 

@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS rounds (
     slutdatum       TEXT NOT NULL,
     startvarde_sek  REAL NOT NULL,
     slutvarde_sek   REAL,                     -- fylls i när omgången avslutas
+    tillskott_sek   REAL NOT NULL DEFAULT 0,  -- pengar som tillförts vid konkurs (räknas bort från avkastningen)
     status          TEXT NOT NULL DEFAULT 'aktiv'  -- aktiv / avslutad
 );
 
@@ -38,13 +39,14 @@ CREATE TABLE IF NOT EXISTS positions (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
     agent_id            TEXT NOT NULL REFERENCES agents(id),
     ticker              TEXT NOT NULL,
-    typ                 TEXT NOT NULL,        -- aktie / krypto
     valuta              TEXT NOT NULL,
     antal               REAL NOT NULL,
     snittpris           REAL NOT NULL,        -- i instrumentets valuta
     havstang            REAL NOT NULL DEFAULT 1,
-    sakerhet_sek        REAL NOT NULL,        -- egen insats som låsts
-    lan_sek             REAL NOT NULL DEFAULT 0,
+    kostnad_sek         REAL NOT NULL,        -- positionens värde i SEK när den öppnades
+    sakerhet_sek        REAL NOT NULL,        -- låst säkerhet (minskar om räntor dras härifrån)
+    lan_sek             REAL NOT NULL DEFAULT 0,  -- lånat belopp (bara långa med hävstång)
+    insats_sek          REAL NOT NULL,        -- allt Carl lagt in: säkerhet + avgifter + räntor
     likvidationspris    REAL,                 -- i instrumentets valuta
     oppnad              TEXT NOT NULL DEFAULT (datetime('now')),
     strategi            TEXT
@@ -109,6 +111,8 @@ CREATE TABLE IF NOT EXISTS bankruptcies (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     agent_id    TEXT NOT NULL REFERENCES agents(id),
     tid         TEXT NOT NULL DEFAULT (datetime('now')),
+    round_id    INTEGER REFERENCES rounds(id),
+    varde_sek   REAL NOT NULL,                -- kontovärde när konkursen inträffade
     analys      TEXT                          -- NULL tills Carl skrivit den
 );
 """

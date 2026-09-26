@@ -1,4 +1,4 @@
-"""Börsernas öppettider. Krypto är alltid öppet."""
+"""Börsernas öppettider. (Krypto handlas bara via ETP:er på Stockholmsbörsen.)"""
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -6,27 +6,8 @@ from zoneinfo import ZoneInfo
 from . import config
 
 SE_TZ = ZoneInfo("Europe/Stockholm")
-KRYPTO = "krypto"
-
-
-def is_crypto(ticker: str) -> bool:
-    return crypto_symbol(ticker) is not None
-
-
-def crypto_symbol(ticker: str) -> str | None:
-    """'BTC', 'btc', 'BTC-USD', 'BTC-SEK' -> 'BTC' om den finns i config, annars None."""
-    t = ticker.upper().strip()
-    for suffix in ("-USD", "-SEK", "-EUR", "-USDT"):
-        if t.endswith(suffix):
-            t = t[: -len(suffix)]
-            break
-    return t if t in config.load()["krypto"] else None
-
-
 def exchange_for(ticker: str) -> str:
-    """Vilken börs en ticker hör till, t.ex. 'stockholm', 'usa' eller 'krypto'."""
-    if is_crypto(ticker):
-        return KRYPTO
+    """Vilken börs en ticker hör till, t.ex. 'stockholm' eller 'usa'."""
     t = ticker.upper()
     borser = config.load()["borser"]
     for key, b in borser.items():
@@ -61,8 +42,6 @@ def _is_trading_day(key: str, d) -> bool:
 
 def status(key: str, now: datetime | None = None) -> MarketStatus:
     now = now or datetime.now(timezone.utc)
-    if key == KRYPTO:
-        return MarketStatus(KRYPTO, "Krypto (24/7)", True, None, None)
     b = config.load()["borser"][key]
     tz = ZoneInfo(b["tidszon"])
     local = now.astimezone(tz)
@@ -87,5 +66,4 @@ def is_open(ticker: str, now: datetime | None = None) -> bool:
 
 
 def all_status(now: datetime | None = None) -> list[MarketStatus]:
-    keys = list(config.load()["borser"].keys()) + [KRYPTO]
-    return [status(k, now) for k in keys]
+    return [status(k, now) for k in config.load()["borser"]]
