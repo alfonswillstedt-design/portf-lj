@@ -85,7 +85,7 @@ def test_session_och_att_kopiera(world):
     engine.open_position(ctx(), "ERIC-B.ST", 100, "blankad", havstang=3)
     m.p["VOLV-B.ST"] = (110.0, "SEK")
     r = journal.end_session(ctx(), "Bra dag.", "Blankningen i ERIC görs med BEAR ERICSSON X3.", "Bevaka Volvo.")
-    assert "1. KÖP 50 st VOLV-B.ST à ca 100.00 SEK" in r["att_kopiera"]
+    assert "1. KÖP 50 st VOLV-B.ST à ca 100,00 SEK (≈ 5 000 kr)" in r["att_kopiera"]
     assert "2. BLANKA 100 st ERIC-B.ST" in r["att_kopiera"] and "certifikat" in r["att_kopiera"]
     assert "BEAR ERICSSON X3" in r["att_kopiera"]
     assert r["sedan_forra"] == pytest.approx(r["varde"] - 100000)

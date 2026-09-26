@@ -49,6 +49,8 @@ class Ctx:
         if t not in self._cache:
             q, fx = self.quote_fn(t)
             prices.save_quote(self.conn, q)
+            if q.valuta != "SEK":
+                prices.save_quote(self.conn, Quote(f"{q.valuta}SEK=X", fx.pris, "SEK", fx.pristid, fx.kalla))
             self._cache[t] = (q, fx)
         return self._cache[t]
 

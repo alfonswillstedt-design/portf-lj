@@ -69,6 +69,11 @@ def previous_session(ctx: Ctx, before_id: int | None = None):
     return ctx.conn.execute(q + " ORDER BY id DESC LIMIT 1", args).fetchone()
 
 
+def sv(x: float, d: int = 2) -> str:
+    """Svensk talformatering: 32 500,00"""
+    return f"{x:,.{d}f}".replace(",", " ").replace(".", ",")
+
+
 _NAMN = {"buy": "KÖP", "sell": "SÄLJ", "short": "BLANKA", "cover": "KÖP TILLBAKA (täck blankning)",
          "liquidation": "STÄNG (likviderad)"}
 
@@ -77,8 +82,8 @@ def copy_list(ctx: Ctx, session_id: int) -> list[str]:
     rows = ctx.conn.execute("SELECT * FROM trades WHERE session_id=? ORDER BY id", (session_id,)).fetchall()
     out = []
     for t in rows:
-        s = (f"{_NAMN[t['handling']]} {t['antal']:g} st {t['ticker']} à ca {t['pris']:,.2f} {t['valuta']}"
-             f" (≈ {t['varde_sek']:,.0f} kr)")
+        s = (f"{_NAMN[t['handling']]} {t['antal']:g} st {t['ticker']} à ca {sv(t['pris'])} {t['valuta']}"
+             f" (≈ {sv(t['varde_sek'], 0)} kr)")
         if t["havstang"] > 1:
             s += f", hävstång {t['havstang']:g}x"
         if t["handling"] in ("short", "cover") or (t["havstang"] > 1 and t["handling"] in ("buy", "sell")):

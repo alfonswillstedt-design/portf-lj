@@ -1,0 +1,277 @@
+<title>Carl-Gustafs portfölj</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0e1318;
+  --surface: #151c23;
+  --line: #24303b;
+  --ink: #e4ebf1;
+  --ink-2: #a9b6c2;
+  --muted: #74828f;
+  --accent: #5ea8e0;
+  --good: #3fb46b;
+  --bad: #ef5b52;
+  --warn: #d9a23a;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); padding: 20px 16px 48px; }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+h1 span { color: var(--muted); font-weight: 400; font-size: 15px; margin-left: 8px; }
+h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); margin: 0 0 10px; }
+.meta { color: var(--muted); font-size: 13px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 12px; color: var(--ink-2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.dot.live { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.kpi { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.kpi .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.kpi .val { font: 500 22px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: 12px; color: var(--ink-2); font-family: var(--mono); }
+.kpi.crash .val { color: var(--bad); }
+
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+.chart-box { position: relative; height: 280px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+@media (min-width: 900px) { .grid2 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; } }
+
+.copy { font-family: var(--mono); font-size: 13px; white-space: pre-wrap; line-height: 1.65; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; margin: 0; overflow-wrap: anywhere; }
+.copy-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+button { font: 500 12px var(--sans); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.note { color: var(--ink-2); font-size: 13px; margin: 10px 0 0; }
+.note b { color: var(--ink); font-weight: 500; }
+
+.tbl { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.r, th.r { text-align: right; }
+td.num, td .num { white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.tag.buy { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+.tag.sell, .tag.cover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.tag.short { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.tag.liquidation { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 55%, transparent); }
+.why { color: var(--ink-2); margin-top: 4px; max-width: 70ch; }
+.lesson { color: var(--ink); margin-top: 4px; max-width: 70ch; font-style: italic; }
+.empty { color: var(--muted); padding: 8px 0; }
+.age-old { color: var(--warn); }
+.crash-box { border-color: color-mix(in srgb, var(--bad) 55%, var(--line)); }
+.crash-box h3 { margin: 0 0 6px; font-size: 14px; color: var(--bad); }
+.crash-box p { margin: 0 0 14px; white-space: pre-wrap; max-width: 75ch; color: var(--ink-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Carl-Gustaf <span>simulerad portfölj</span></h1>
+    <div class="meta">
+      <span class="pill"><span class="dot" id="live-dot"></span><span id="live-txt">laddar…</span></span>
+      <span id="updated"></span>
+    </div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>Portföljvärde över tid</h2>
+    <div class="chart-box"><canvas id="chart" aria-label="Portföljvärde över tid jämfört med startkapitalet" role="img"></canvas></div>
+  </section>
+
+  <div class="grid2">
+    <section>
+      <div class="copy-head">
+        <h2 style="margin:0">Att kopiera till tävlingen</h2>
+        <button id="copy-btn" type="button">Kopiera</button>
+      </div>
+      <div id="copy-meta" class="note" style="margin:6px 0 10px"></div>
+      <pre class="copy" id="copy"></pre>
+      <div id="session-notes"></div>
+    </section>
+
+    <section>
+      <h2>Innehav</h2>
+      <div class="tbl"><table id="positions"></table></div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Tradehistorik</h2>
+    <div class="tbl"><table id="trades"></table></div>
+  </section>
+
+  <section>
+    <h2>Omgångar</h2>
+    <div class="tbl"><table id="rounds"></table></div>
+  </section>
+
+  <section class="crash-box" id="crashes" hidden></section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const EMBEDDED = /*__CARL_DATA__*/null;
+const TZ = "Europe/Stockholm";
+const kr = (v, d = 0) => v == null ? "–" : v.toLocaleString("sv-SE", { minimumFractionDigits: d, maximumFractionDigits: d }) + " kr";
+const n = (v, d = 2) => v == null ? "–" : v.toLocaleString("sv-SE", { minimumFractionDigits: d, maximumFractionDigits: d });
+const sign = (v, f) => (v > 0 ? "+" : "") + f(v);
+const cls = v => v > 0 ? "pos" : v < 0 ? "neg" : "";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const when = iso => iso ? new Date(iso).toLocaleString("sv-SE", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }) : "–";
+const css = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+
+function age(iso) {
+  if (!iso) return { txt: "okänt", old: true };
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  const txt = s < 120 ? Math.round(s) + " s" : s < 7200 ? Math.round(s / 60) + " min" : s < 172800 ? (s / 3600).toFixed(1) + " h" : (s / 86400).toFixed(1) + " d";
+  return { txt, old: s > 3600 };
+}
+
+const NAMN = { buy: "Köp", sell: "Sälj", short: "Blanka", cover: "Täck", liquidation: "Likviderad" };
+let chart;
+
+function render(d) {
+  const o = d.omgang;
+  document.getElementById("updated").textContent = "Data från " + when(d.genererad);
+  const kpis = [
+    { lbl: "Totalt värde", val: kr(d.totalt), sub: o ? `start ${kr(o.startvarde)}` : "" },
+    { lbl: "Avkastning omgången", val: o ? `<span class="${cls(o.avkastning_procent)}">${sign(o.avkastning_procent, v => n(v, 2))} %</span>` : "–", sub: o ? `<span class="${cls(o.avkastning_sek)}">${sign(o.avkastning_sek, v => kr(v))}</span>` : "" },
+    { lbl: "Kassa", val: kr(d.kassa), sub: `avgifter totalt ${kr(d.avgifter)}` },
+    { lbl: "Dagar kvar", val: o ? o.dagar_kvar : "–", sub: o ? `omgång ${o.id} slutar ${o.slut}` : "ingen aktiv omgång" },
+    { lbl: "Träffsäkerhet", val: d.traffsakerhet == null ? "–" : n(d.traffsakerhet, 0) + " %", sub: `${d.avslutade} avslutade affärer` },
+    { lbl: "Konkurser", val: d.konkurser, sub: d.konkurser ? "straffräknaren" : "inga än", crash: d.konkurser > 0 },
+  ];
+  document.getElementById("kpis").innerHTML = kpis.map(k =>
+    `<div class="kpi${k.crash ? " crash" : ""}"><span class="lbl">${k.lbl}</span><span class="val">${k.val}</span><span class="sub">${k.sub}</span></div>`).join("");
+
+  // Att kopiera
+  const s = d.senaste_session;
+  document.getElementById("copy").textContent = s ? s.att_kopiera : "Ingen session har körts än.";
+  document.getElementById("copy-meta").innerHTML = s
+    ? `Session #${s.id}, avslutad ${when(s.slut)}` + (d.pagaende_session ? ` · <b>ny session pågår</b>` : "")
+    : (d.pagaende_session ? "<b>Session pågår…</b>" : "");
+  document.getElementById("session-notes").innerHTML = s ? [
+    s.sammanfattning ? `<p class="note"><b>Sammanfattning:</b> ${esc(s.sammanfattning)}</p>` : "",
+    s.tankar ? `<p class="note"><b>Inför nästa session:</b> ${esc(s.tankar)}</p>` : "",
+  ].join("") : "";
+
+  // Innehav
+  const P = d.positioner;
+  document.getElementById("positions").innerHTML = P.length ? `
+    <thead><tr><th>Ticker</th><th class="r">Antal</th><th class="r">Inköp</th><th class="r">Nu</th><th class="r">Resultat</th><th class="r">Häv.</th><th class="r">Likv.pris</th><th class="r">Prisålder</th></tr></thead>
+    <tbody>${P.map(p => { const a = age(p.pristid); return `<tr>
+      <td>${esc(p.ticker)}${p.riktning === "blankad" ? ' <span class="tag short">blankad</span>' : ""}</td>
+      <td class="r num">${n(Math.abs(p.antal), 0)}</td>
+      <td class="r num">${n(p.snittpris)} ${esc(p.valuta)}</td>
+      <td class="r num">${n(p.pris)}</td>
+      <td class="r num ${cls(p.resultat_sek)}">${sign(p.resultat_sek, v => kr(v))}<br><span class="${cls(p.resultat_procent)}">${sign(p.resultat_procent, v => n(v, 1))} %</span></td>
+      <td class="r num">${n(p.havstang, 1)}x</td>
+      <td class="r num">${p.likvidationspris ? n(p.likvidationspris) : "–"}</td>
+      <td class="r num ${a.old ? "age-old" : ""}">${a.txt}</td></tr>`; }).join("")}</tbody>`
+    : `<tbody><tr><td class="empty">Inga innehav just nu.</td></tr></tbody>`;
+
+  // Affärer
+  const T = d.affarer;
+  document.getElementById("trades").innerHTML = T.length ? `
+    <thead><tr><th>Tid</th><th>Affär</th><th class="r">Antal</th><th class="r">Pris</th><th class="r">Värde</th><th class="r">Resultat</th><th>Motivering</th></tr></thead>
+    <tbody>${T.map(t => `<tr>
+      <td class="num">${when(t.tid)}</td>
+      <td><span class="tag ${t.handling}">${NAMN[t.handling] || t.handling}</span> ${esc(t.ticker)}${t.havstang > 1 ? ` <span class="num">${n(t.havstang, 1)}x</span>` : ""}${t.strategi ? `<br><span class="tag">${esc(t.strategi)}</span>` : ""}</td>
+      <td class="r num">${n(t.antal, 0)}</td>
+      <td class="r num">${n(t.pris)} ${esc(t.valuta)}</td>
+      <td class="r num">${kr(t.varde_sek)}<br><span style="color:var(--muted)">avg ${kr(t.avgift_sek, 2)}</span></td>
+      <td class="r num ${cls(t.resultat_sek)}">${t.resultat_sek == null ? "–" : sign(t.resultat_sek, v => kr(v))}</td>
+      <td><div class="why">${esc(t.motivering) || "–"}</div>${t.lardom ? `<div class="lesson">Lärdom: ${esc(t.lardom)}</div>` : ""}</td></tr>`).join("")}</tbody>`
+    : `<tbody><tr><td class="empty">Inga affärer än.</td></tr></tbody>`;
+
+  // Omgångar
+  const R = d.omgangar;
+  document.getElementById("rounds").innerHTML = R.length ? `
+    <thead><tr><th>Omgång</th><th>Period</th><th class="r">Startvärde</th><th class="r">Slutvärde</th><th class="r">Avkastning</th><th>Status</th></tr></thead>
+    <tbody>${R.map(r => { const bas = r.startvarde_sek + r.tillskott_sek; const slut = r.slutvarde_sek ?? (r.status === "aktiv" ? d.totalt : null); const pct = slut != null ? 100 * (slut / bas - 1) : null; return `<tr>
+      <td>${r.id}</td><td class="num">${r.startdatum} – ${r.slutdatum}</td>
+      <td class="r num">${kr(r.startvarde_sek)}</td>
+      <td class="r num">${r.slutvarde_sek != null ? kr(r.slutvarde_sek) : "pågår"}</td>
+      <td class="r num ${cls(pct)}">${pct == null ? "–" : sign(pct, v => n(v, 2)) + " %"}</td>
+      <td><span class="tag">${r.status}</span></td></tr>`; }).join("")}</tbody>`
+    : `<tbody><tr><td class="empty">Ingen omgång startad.</td></tr></tbody>`;
+
+  // Haverier
+  const C = d.haverier, box = document.getElementById("crashes");
+  box.hidden = !C.length;
+  box.innerHTML = C.length ? `<h2>Konkurser och haveri-analyser</h2>` + C.map((c, i) =>
+    `<h3>Konkurs #${i + 1} · ${when(c.tid)}</h3><p>${c.analys ? esc(c.analys) : "Haveri-analys saknas – Carl får inte handla förrän den är skriven."}</p>`).join("") : "";
+
+  try { drawChart(d); }
+  catch (e) { document.querySelector(".chart-box").innerHTML = '<p class="empty">Grafen kunde inte laddas.</p>'; }
+}
+
+function drawChart(d) {
+  const pts = d.equity.map(e => ({ x: new Date(e.t).getTime(), y: e.v }));
+  const nowX = new Date(d.genererad).getTime();
+  if (!pts.length || nowX > pts[pts.length - 1].x) pts.push({ x: nowX, y: d.totalt });
+  const xs = pts.map(p => p.x);
+  const base = xs.length ? [{ x: Math.min(...xs), y: d.startkapital }, { x: Math.max(...xs), y: d.startkapital }] : [];
+  const ink2 = css("--ink-2"), muted = css("--muted"), line = css("--line"), accent = css("--accent");
+  const data = {
+    datasets: [
+      { label: "Portföljvärde", data: pts, borderColor: accent, borderWidth: 2, pointRadius: ctx => ctx.dataIndex === pts.length - 1 ? 4 : 0,
+        pointBackgroundColor: accent, pointHoverRadius: 5, fill: { target: { value: d.startkapital }, above: "rgba(63,180,107,0.10)", below: "rgba(239,91,82,0.12)" }, tension: 0.15 },
+      { label: "Startkapital", data: base, borderColor: muted, borderWidth: 1, borderDash: [4, 4], pointRadius: 0, pointHoverRadius: 0, fill: false },
+    ],
+  };
+  if (chart) { chart.data = data; chart.update("none"); return; }
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line", data,
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      interaction: { mode: "nearest", axis: "x", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: { filter: i => i.datasetIndex === 0, displayColors: false,
+          callbacks: { title: it => when(new Date(it[0].parsed.x).toISOString()), label: it => kr(it.parsed.y) } },
+      },
+      scales: {
+        x: { type: "linear", grid: { display: false }, border: { color: line },
+             ticks: { color: muted, maxTicksLimit: 6, callback: v => new Date(v).toLocaleDateString("sv-SE", { timeZone: TZ, day: "numeric", month: "short" }) } },
+        y: { grid: { color: line }, border: { display: false },
+             ticks: { color: ink2, maxTicksLimit: 6, callback: v => (v / 1000).toLocaleString("sv-SE") + " tkr" } },
+      },
+    },
+  });
+}
+
+document.getElementById("copy-btn").addEventListener("click", async () => {
+  const el = document.getElementById("copy"), btn = document.getElementById("copy-btn");
+  try { await navigator.clipboard.writeText(el.textContent); btn.textContent = "Kopierat"; }
+  catch { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Markerat – tryck Ctrl+C"; }
+  setTimeout(() => (btn.textContent = "Kopiera"), 2000);
+});
+
+function setLive(ok, txt) {
+  document.getElementById("live-dot").className = "dot " + (ok ? "live" : "warn");
+  document.getElementById("live-txt").textContent = txt;
+}
+
+if (EMBEDDED) {
+  setLive(false, "ögonblicksbild");
+  render(EMBEDDED);
+} else {
+  const poll = async () => {
+    try { const r = await fetch("/api/data", { cache: "no-store" }); render(await r.json()); setLive(true, "live · var 5:e sekund"); }
+    catch { setLive(false, "ingen kontakt med servern"); }
+  };
+  poll(); setInterval(poll, 5000);
+}
+</script>

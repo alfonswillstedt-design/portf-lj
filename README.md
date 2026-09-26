@@ -8,13 +8,20 @@ några riktiga pengar. Allt ligger i en lokal SQLite-databas (`data/carl.db`).
 - ✅ Fas 1 – Grunden: databas, prisskript, marknadstider, konfiguration
 - ✅ Fas 2 – Handelsmotorn
 - ✅ Fas 3 – Carls hjärna (CLAUDE.md, /session, indikatorer, lärdomar)
-- ⬜ Fas 4 – Dashboard
+- ✅ Fas 4 – Dashboard
 - ⬜ Fas 5 – Första riktiga sessionen
 
 ## Så kör du Carl
 Skriv i chatten: **"Carl, kör en session"** (eller `/session`). Carl följer protokollet i `CLAUDE.md`
 och avslutar med en lista **ATT KOPIERA TILL TÄVLINGEN**. Carls minne (databas och `data/lardomar.md`)
 sparas i det här repot efter varje session.
+
+## Dashboard
+Carls dashboard är en privat webbsida som uppdateras efter varje session:
+**https://claude.ai/artifact/Hcw96AAhdVj2KwVcAwwcMh** (bara du kan öppna den när du är inloggad).
+
+Om Carl i framtiden körs som eget program finns en live-version (uppdateras var 5:e sekund):
+`pip install fastapi uvicorn` och sedan `python dashboard/app.py`, öppna http://127.0.0.1:8000.
 
 ## Installation (bara om man vill köra själv – behövs inte för att använda Carl)
 ```
