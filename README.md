@@ -7,9 +7,14 @@ några riktiga pengar. Allt ligger i en lokal SQLite-databas (`data/carl.db`).
 ## Status
 - ✅ Fas 1 – Grunden: databas, prisskript, marknadstider, konfiguration
 - ✅ Fas 2 – Handelsmotorn
-- ⬜ Fas 3 – Carls hjärna (CLAUDE.md, /session, indikatorer, lärdomar)
+- ✅ Fas 3 – Carls hjärna (CLAUDE.md, /session, indikatorer, lärdomar)
 - ⬜ Fas 4 – Dashboard
 - ⬜ Fas 5 – Första riktiga sessionen
+
+## Så kör du Carl
+Skriv i chatten: **"Carl, kör en session"** (eller `/session`). Carl följer protokollet i `CLAUDE.md`
+och avslutar med en lista **ATT KOPIERA TILL TÄVLINGEN**. Carls minne (databas och `data/lardomar.md`)
+sparas i det här repot efter varje session.
 
 ## Installation (bara om man vill köra själv – behövs inte för att använda Carl)
 ```
@@ -36,6 +41,11 @@ python init_db.py
 | `python portfolio.py trades 20` | De senaste affärerna med motivering |
 | `python portfolio.py haveri "..."` | Obligatorisk haveri-analys efter konkurs |
 | `python round.py status` / `historik` | Omgångar och dagar kvar |
+| `python session.py start` / `slut` | Starta/avsluta en session (briefing, sammanfattning, ATT KOPIERA) |
+| `python indicators.py VOLV-B.ST` | Teknisk analys (SMA, RSI, MACD, volym, volatilitet) |
+| `python indicators.py --lista --sortera rsi` | Skanna bevakningslistan |
+| `python stats.py` | Carls statistik |
+| `python journal.py lardom ID "..."` | Lärdom efter avslutad affär |
 | `python -m pytest` | Kör alla tester |
 
 ## Tickers

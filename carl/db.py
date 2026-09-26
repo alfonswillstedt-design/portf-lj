@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS positions (
     insats_sek          REAL NOT NULL,        -- allt Carl lagt in: säkerhet + avgifter + räntor
     likvidationspris    REAL,                 -- i instrumentets valuta
     oppnad              TEXT NOT NULL DEFAULT (datetime('now')),
-    strategi            TEXT
+    strategi            TEXT,
+    andel_procent       REAL                  -- egen insats i % av kontovärdet vid öppning
 );
 
 -- Varje affär, med Carls motivering.
@@ -71,7 +72,9 @@ CREATE TABLE IF NOT EXISTS trades (
     strategi        TEXT,
     motivering      TEXT,
     prisalder_sek   REAL,                     -- hur gammalt priset var (sekunder)
-    session_id      INTEGER
+    session_id      INTEGER,
+    andel_procent   REAL,                     -- egen insats i % av kontovärdet när positionen öppnades
+    lardom          TEXT                      -- Carls lärdom efter avslutad affär
 );
 
 -- Senast hämtade priser (cache + historik för dashboarden).
@@ -143,8 +146,20 @@ def session(path: Path | str | None = None):
         conn.close()
 
 
+# Kolumner som lagts till efter första versionen: (tabell, kolumn, typ)
+MIGRATIONS = [
+    ("trades", "andel_procent", "REAL"),
+    ("trades", "lardom", "TEXT"),
+    ("positions", "andel_procent", "REAL"),
+]
+
+
 def init(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
+    for table, col, typ in MIGRATIONS:
+        cols = {r["name"] for r in conn.execute(f"PRAGMA table_info({table})")}
+        if col not in cols:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {typ}")
 
 
 def ensure_agent(conn: sqlite3.Connection, agent_id: str = DEFAULT_AGENT,

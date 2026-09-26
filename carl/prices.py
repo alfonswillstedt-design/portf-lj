@@ -101,3 +101,17 @@ def save_quote(conn, q: Quote) -> None:
         "INSERT OR REPLACE INTO prices(ticker, pris, valuta, pristid, hamtad, kalla) VALUES (?,?,?,?,?,?)",
         (q.ticker, q.pris, q.valuta, q.pristid.isoformat(), datetime.now(timezone.utc).isoformat(), q.kalla),
     )
+
+
+def history(ticker: str, period: str = "2y", interval: str = "1d"):
+    """Kurshistorik (pandas DataFrame med Open/High/Low/Close/Volume)."""
+    import yfinance as yf
+
+    try:
+        h = yf.Ticker(ticker.upper()).history(period=period, interval=interval, auto_adjust=True)
+    except Exception as e:
+        raise PriceError(f"Kunde inte hämta historik för {ticker}: {e}") from e
+    h = h.dropna(subset=["Close"]) if h is not None else h
+    if h is None or h.empty:
+        raise PriceError(f"Ingen historik för {ticker}")
+    return h

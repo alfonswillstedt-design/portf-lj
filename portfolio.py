@@ -13,39 +13,42 @@ from trade import fmt
 def status() -> int:
     with db.session() as conn:
         ctx = engine.Ctx(conn)
-        rep = engine.update(ctx)
-        s, acc, rnd = rep.snapshot, engine.account(ctx), engine.active_round(ctx)
-        for liq in rep.likvidationer:
-            print("⚠ " + fmt(liq))
-        if rep.konkurs:
-            print("💥 KONKURS! Kontot är nollställt. Skriv haveri-analysen: python portfolio.py haveri \"...\"")
-        elif engine._pending_crash(ctx):
-            print("💥 Haveri-analys saknas! Ingen handel förrän den är skriven: python portfolio.py haveri \"...\"")
-        for r in rep.avslutade_omgangar:
-            print(f"🏁 Omgång {r['id']} avslutad ({r['startdatum']}–{r['slutdatum']}): {r['slutvarde_sek']:,.2f} kr")
-        print(f"\n=== CARL-GUSTAF  ({ctx.now.astimezone(engine.markets.SE_TZ):%Y-%m-%d %H:%M} svensk tid) ===")
-        print(f"Totalt värde:  {s.totalt_sek:>14,.2f} kr")
-        print(f"Kassa:         {s.kassa_sek:>14,.2f} kr")
-        if rnd:
-            bas = rnd["startvarde_sek"] + rnd["tillskott_sek"]
-            print(f"Omgång {rnd['id']}:      {rnd['startdatum']} – {rnd['slutdatum']}  ({engine.days_left(ctx)} dagar kvar)")
-            print(f"Sedan start:   {s.totalt_sek - bas:>+14,.2f} kr  ({100 * (s.totalt_sek / bas - 1):+.2f} %)")
-        else:
-            print("Ingen aktiv omgång – starta med: python round.py start")
-        print(f"Konkurser:     {acc['konkurser']:>14}")
-        print(f"Avgifter tot:  {acc['avgifter_sek']:>14,.2f} kr" + (f"  (varav räntor denna körning {rep.kostnader_sek:.2f})" if rep.kostnader_sek else ""))
-        if s.positioner:
-            print(f"\n{'Ticker':<16}{'Antal':>8}{'Snitt':>12}{'Nu':>12}{'Värde kr':>13}{'Res kr':>12}{'Res %':>8}{'Häv':>6}{'Likv.pris':>11}  Prisålder")
-            for p in s.positioner:
-                print(f"{p.ticker:<16}{p.antal:>8g}{p.snittpris:>12,.2f}{p.pris:>12,.2f}{p.eget_kapital_sek:>13,.0f}"
-                      f"{p.resultat_sek:>+12,.0f}{p.resultat_procent:>+8.1f}{p.havstang:>5.1f}x"
-                      f"{(f'{p.likvidationspris:,.2f}' if p.likvidationspris else '-'):>11}  {p.prisalder}"
-                      + ("  (BLANKAD)" if p.antal < 0 else ""))
-        else:
-            print("\nInga innehav.")
-        for w in s.varningar:
-            print("! " + w)
+        print_status(ctx, engine.update(ctx))
     return 0
+
+
+def print_status(ctx, rep) -> None:
+    s, acc, rnd = rep.snapshot, engine.account(ctx), engine.active_round(ctx)
+    for liq in rep.likvidationer:
+        print("⚠ " + fmt(liq))
+    if rep.konkurs:
+        print("💥 KONKURS! Kontot är nollställt. Skriv haveri-analysen: python portfolio.py haveri \"...\"")
+    elif engine._pending_crash(ctx):
+        print("💥 Haveri-analys saknas! Ingen handel förrän den är skriven: python portfolio.py haveri \"...\"")
+    for r in rep.avslutade_omgangar:
+        print(f"🏁 Omgång {r['id']} avslutad ({r['startdatum']}–{r['slutdatum']}): {r['slutvarde_sek']:,.2f} kr")
+    print(f"\n=== CARL-GUSTAF  ({ctx.now.astimezone(engine.markets.SE_TZ):%Y-%m-%d %H:%M} svensk tid) ===")
+    print(f"Totalt värde:  {s.totalt_sek:>14,.2f} kr")
+    print(f"Kassa:         {s.kassa_sek:>14,.2f} kr")
+    if rnd:
+        bas = rnd["startvarde_sek"] + rnd["tillskott_sek"]
+        print(f"Omgång {rnd['id']}:      {rnd['startdatum']} – {rnd['slutdatum']}  ({engine.days_left(ctx)} dagar kvar)")
+        print(f"Sedan start:   {s.totalt_sek - bas:>+14,.2f} kr  ({100 * (s.totalt_sek / bas - 1):+.2f} %)")
+    else:
+        print("Ingen aktiv omgång – starta med: python round.py start")
+    print(f"Konkurser:     {acc['konkurser']:>14}")
+    print(f"Avgifter tot:  {acc['avgifter_sek']:>14,.2f} kr" + (f"  (varav räntor denna körning {rep.kostnader_sek:.2f})" if rep.kostnader_sek else ""))
+    if s.positioner:
+        print(f"\n{'Ticker':<16}{'Antal':>8}{'Snitt':>12}{'Nu':>12}{'Värde kr':>13}{'Res kr':>12}{'Res %':>8}{'Häv':>6}{'Likv.pris':>11}  Prisålder")
+        for p in s.positioner:
+            print(f"{p.ticker:<16}{p.antal:>8g}{p.snittpris:>12,.2f}{p.pris:>12,.2f}{p.eget_kapital_sek:>13,.0f}"
+                  f"{p.resultat_sek:>+12,.0f}{p.resultat_procent:>+8.1f}{p.havstang:>5.1f}x"
+                  f"{(f'{p.likvidationspris:,.2f}' if p.likvidationspris else '-'):>11}  {p.prisalder}"
+                  + ("  (BLANKAD)" if p.antal < 0 else ""))
+    else:
+        print("\nInga innehav.")
+    for w in s.varningar:
+        print("! " + w)
 
 
 def trades(n: int) -> int:

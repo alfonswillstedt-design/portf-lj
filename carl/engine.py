@@ -99,6 +99,11 @@ def active_round(ctx: Ctx) -> sqlite3.Row | None:
                             (ctx.agent_id,)).fetchone()
 
 
+def active_session(ctx: Ctx) -> sqlite3.Row | None:
+    return ctx.conn.execute("SELECT * FROM sessions WHERE agent_id=? AND slut IS NULL ORDER BY id DESC LIMIT 1",
+                            (ctx.agent_id,)).fetchone()
+
+
 def today_se(ctx: Ctx) -> date:
     return ctx.now.astimezone(markets.SE_TZ).date()
 
@@ -243,15 +248,18 @@ def _age_warning(q: Quote) -> list[str]:
 
 
 def _log_trade(ctx: Ctx, r: TradeResult, strategi: str | None, motivering: str | None,
-               prisalder: float | None, session_id: int | None) -> None:
+               prisalder: float | None, session_id: int | None, andel: float | None = None) -> None:
     rnd = active_round(ctx)
+    if session_id is None:
+        s = active_session(ctx)
+        session_id = s["id"] if s else None
     ctx.conn.execute(
         """INSERT INTO trades(agent_id, round_id, tid, handling, ticker, antal, pris, valuta, valutakurs, varde_sek,
-           avgift_sek, havstang, resultat_sek, strategi, motivering, prisalder_sek, session_id)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+           avgift_sek, havstang, resultat_sek, strategi, motivering, prisalder_sek, session_id, andel_procent)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (ctx.agent_id, rnd["id"] if rnd else None, ctx.now.isoformat(), r.handling, r.ticker, r.antal, r.pris,
          r.valuta, r.valutakurs, r.varde_sek, r.avgift_sek, r.havstang, r.resultat_sek, strategi, motivering,
-         prisalder, session_id))
+         prisalder, session_id, andel))
 
 
 def shares_for_amount(ctx: Ctx, ticker: str, belopp_sek: float, havstang: float = 1.0) -> int:
@@ -286,6 +294,8 @@ def open_position(ctx: Ctx, ticker: str, antal: float, riktning: str = "lång", 
         raise TradeError(f"För lite pengar: behöver {collateral + fee:,.2f} kr (säkerhet {collateral:,.2f} + "
                          f"avgift {fee:,.2f}), kassan är {kassa:,.2f} kr.")
 
+    total_fore = snapshot(ctx).totalt_sek
+    andel = 100 * (collateral + fee) / total_fore if total_fore > 0 else None
     sign = 1 if riktning == "lång" else -1
     loan = value - collateral if sign > 0 else 0.0
     existing = _position(ctx, ticker)
@@ -305,16 +315,16 @@ def open_position(ctx: Ctx, ticker: str, antal: float, riktning: str = "lång", 
     else:
         ctx.conn.execute(
             """INSERT INTO positions(agent_id, ticker, valuta, antal, snittpris, havstang, kostnad_sek, sakerhet_sek,
-               lan_sek, insats_sek, oppnad, strategi) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+               lan_sek, insats_sek, oppnad, strategi, andel_procent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (ctx.agent_id, ticker, q.valuta, sign * antal, q.pris, havstang, value, collateral, loan,
-             collateral + fee, ctx.now.isoformat(), strategi))
+             collateral + fee, ctx.now.isoformat(), strategi, andel))
     _set_cash(ctx, kassa - collateral - fee, fee)
     pos = _position(ctx, ticker)
     ctx.conn.execute("UPDATE positions SET likvidationspris=? WHERE id=?",
                      (liquidation_price(pos, fx.pris), pos["id"]))
     r = TradeResult(handling, ticker, antal, q.pris, q.valuta, fx.pris, value, fee, havstang, None,
                     account(ctx)["kassa_sek"], warn)
-    _log_trade(ctx, r, strategi, motivering, q.alder_sekunder, session_id)
+    _log_trade(ctx, r, strategi, motivering, q.alder_sekunder, session_id, andel)
     return r
 
 
@@ -360,7 +370,8 @@ def close_position(ctx: Ctx, ticker: str, antal: float | None = None, motivering
         handling = "sell" if pos["antal"] > 0 else "cover"
     r = TradeResult(handling, ticker, antal, q.pris, q.valuta, fx.pris, value, fee, pos["havstang"], result,
                     account(ctx)["kassa_sek"], warn)
-    _log_trade(ctx, r, strategi or pos["strategi"], motivering, q.alder_sekunder, session_id)
+    _log_trade(ctx, r, strategi or pos["strategi"], motivering, q.alder_sekunder, session_id,
+               pos["andel_procent"])
     return r
 
 
@@ -413,10 +424,8 @@ def write_crash_analysis(ctx: Ctx, analys: str) -> int:
         raise TradeError("Haveri-analysen är för kort. Vad gick fel, vilka beslut ledde dit, vad gör du annorlunda?")
     ctx.conn.execute("UPDATE bankruptcies SET analys=? WHERE id=?", (analys.strip(), crash["id"]))
     n = account(ctx)["konkurser"]
-    path = Path(ctx.lardomar_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not path.exists():
-        path.write_text("# Carl-Gustafs lärdomar\n\n", encoding="utf-8")
+    from .journal import ensure_file
+    path = ensure_file(ctx.lardomar_path)
     with open(path, "a", encoding="utf-8") as f:
         f.write(f"\n## 💥 HAVERI-ANALYS – KONKURS #{n} ({today_se(ctx)})\n\n{analys.strip()}\n")
     return n
