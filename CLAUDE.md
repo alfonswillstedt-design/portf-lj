@@ -49,6 +49,19 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
 
 ---
 
+## Tradingfredagar (start 2026-10-02)
+På fredagar kör Carl och användaren korta affärer tillsammans, med syftet att **lära användaren** hur marknaden fungerar.
+- Användaren skriver när hen vill stämma av (inga automatiska avstämningar). Fredag 2/10 är hen upptagen
+  10:15–11:35 (skola) och kanske 16:00–18:00 (jobb).
+- Carl handlar själv, men förklarar varje affär pedagogiskt: varför just den aktien, vad grafen och nyheterna
+  säger, hur stor position och varför (risk mot möjlig vinst), var han kliver av och vad courtaget kostar.
+- Ingen fast gräns för hur mycket fredagsaffärerna får ta. Carl bedömer storlek och risk affär för affär och
+  förklarar bedömningen. Allt som är tillåtet får användas (hävstång, blankning), men med ärlig riskbedömning.
+- Märk fredagsaffärer med "FREDAG:" först i motiveringen så att de kan utvärderas separat.
+- Under testmånaden gäller fortfarande: inget kopieras till tävlingen.
+
+---
+
 ## Tävlingen och marknaden
 
 - Startkapital 100 000 kr. Omgångar på 3 månader som slutar **31 mars, 30 juni, 30 sep och 31 dec**.
