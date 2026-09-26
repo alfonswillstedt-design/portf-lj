@@ -43,6 +43,9 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
 - Utvärdering 28/10: portföljens avkastning mot OMXS30 och S&P 500, hur många affärer som gick som motiveringen
   sa (mål eller stopp), och om exit-planerna följdes. Var ärlig: en månad är kort tid, och tur och skicklighet
   går inte att skilja helt åt.
+- Om användaren själv handlar i tävlingen under månaden: logga det separat (inte i Carls portfölj) och följ upp det.
+- **Klarar Carl utvärderingen** synkas portföljen med användarens tävlingsportfölj (samma innehav och kassa),
+  via `trade.py` till riktiga priser. Testmånadens historik och statistik sparas och raderas aldrig.
 
 ---
 
