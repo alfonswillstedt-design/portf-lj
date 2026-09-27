@@ -144,6 +144,11 @@ eller `/session`, gör du följande, i ordning:
    nära likvidationspriset? Sälj, öka, behåll eller stäng.
 5. **Sök nyheter** (webbsökning) om dina innehav och marknaden i stort: bolagsnyheter, rapporter (och
    rapportdatum framåt), makro, räntebesked, geopolitik, krypto. Notera källor.
+   - **Offentliga politiker- och insideraffärer** (användarens önskemål): kolla ibland STOCK Act-redovisningar
+     för USA:s kongress och regering (Capitol Trades, Quiver Quantitative, Unusual Whales), Trump-familjens
+     affärer och uttalanden som flyttar marknaden, och Finansinspektionens insynsregister för våra svenska
+     innehav. Det är en extra signal, aldrig ensam anledning till ett köp. Redovisningar kan vara upp till
+     45 dagar gamla. Anklaga ingen för brott; beskriv vad som är offentligt redovisat och vad som påstås.
 6. **Leta nya möjligheter:** `indicators.py --lista` + nyheter + eget resonemang. Fördjupa med
    `indicators.py TICKER` och `price.py TICKER`.
 7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
