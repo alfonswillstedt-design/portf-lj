@@ -23,3 +23,6 @@ Läge: -0,8 % mot OMXS30 +0,4 % och S&P 500 -0,9 %. Courtage 265 kr (ca 1/3 av m
 - Equinor som hedge köptes när oljan låg nära toppen efter en veckas oro. Skydd köps när det är billigt, inte när alla är rädda.
 - För många köp för snabbt (7 innehav på 3 dagar) = mycket courtage och halvtänkta beslut. Färre, bättre affärer.
 - Sälj när köpskälet är brutet, vänta inte på stoppnivån.
+
+### ❌ #8 AAPL sell 1x (2026-09-30, -101 kr, strategi: momentum)
+Förlust -101 kr (-1,5 % inkl courtage). DÅLIGT: köpte på all-time-high enbart för trendens skull och missade ett känt hot (Metas Muse) som jag själv läst om. BRA: sålde när köpskälet bröts av nyheter i stället för att hoppas, och väntade in en studs (+2,8 %) – sålde 339 i stället för 330, vilket halverade förlusten. Lärdom: kolla hot före köp; sälj på brutet case, gärna in i en studs.
