@@ -59,6 +59,8 @@ td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: to
 td.r, th.r { text-align: right; }
 td.num, td .num { white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
+tr.group td { background: var(--bg); font-weight: 600; color: var(--ink); border-top: 1px solid var(--line); }
+.group-sub { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 6px; }
 .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
 .tag.buy { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
 .tag.sell, .tag.cover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
@@ -168,9 +170,9 @@ function render(d) {
 
   // Innehav
   const P = d.positioner;
-  document.getElementById("positions").innerHTML = P.length ? `
-    <thead><tr><th>Ticker</th><th class="r">Antal</th><th class="r">Inköp</th><th class="r">Nu</th><th class="r">Resultat</th><th class="r">Häv.</th><th class="r">Likv.pris</th><th class="r">Prisålder</th></tr></thead>
-    <tbody>${P.map(p => { const a = age(p.pristid); return `<tr>
+  const GRUPPER = ["Aktier", "Fonder & ETF:er", "Krypto", "Hävstång & blankning"];
+  const grupper = GRUPPER.map(g => ({ g, rows: P.filter(p => (p.typ || "Aktier") === g) })).filter(x => x.rows.length);
+  const rad = p => { const a = age(p.pristid); return `<tr>
       <td>${esc(p.ticker)}${p.riktning === "blankad" ? ' <span class="tag short">blankad</span>' : ""}</td>
       <td class="r num">${n(Math.abs(p.antal), 0)}</td>
       <td class="r num">${n(p.snittpris)} ${esc(p.valuta)}</td>
@@ -178,7 +180,18 @@ function render(d) {
       <td class="r num ${cls(p.resultat_sek)}">${sign(p.resultat_sek, v => kr(v))}<br><span class="${cls(p.resultat_procent)}">${sign(p.resultat_procent, v => n(v, 1))} %</span></td>
       <td class="r num">${n(p.havstang, 1)}x</td>
       <td class="r num">${p.likvidationspris ? n(p.likvidationspris) : "–"}</td>
-      <td class="r num ${a.old ? "age-old" : ""}">${a.txt}</td></tr>`; }).join("")}</tbody>`
+      <td class="r num ${a.old ? "age-old" : ""}">${a.txt}</td></tr>`; };
+  const grupphuvud = ({ g, rows }) => {
+    const varde = rows.reduce((s, p) => s + p.eget_kapital_sek, 0);
+    const res = rows.reduce((s, p) => s + p.resultat_sek, 0);
+    return `<tr class="group"><td colspan="4">${esc(g)} <span class="group-sub">${rows.length} st · ${n(100 * varde / d.totalt, 0)} % av portföljen</span></td>
+      <td class="r num">${kr(varde)}<br><span class="${cls(res)}">${sign(res, v => kr(v))}</span></td><td colspan="3"></td></tr>`;
+  };
+  document.getElementById("positions").innerHTML = P.length ? `
+    <thead><tr><th>Innehav</th><th class="r">Antal</th><th class="r">Inköp</th><th class="r">Nu</th><th class="r">Resultat</th><th class="r">Häv.</th><th class="r">Likv.pris</th><th class="r">Prisålder</th></tr></thead>
+    <tbody>${grupper.map(x => grupphuvud(x) + x.rows.map(rad).join("")).join("")}
+    <tr class="group"><td colspan="4">Kassa <span class="group-sub">${n(100 * d.kassa / d.totalt, 0)} % av portföljen</span></td>
+      <td class="r num">${kr(d.kassa)}</td><td colspan="3"></td></tr></tbody>`
     : `<tbody><tr><td class="empty">Inga innehav just nu.</td></tr></tbody>`;
 
   // Affärer
@@ -187,7 +200,7 @@ function render(d) {
     <thead><tr><th>Tid</th><th>Affär</th><th class="r">Antal</th><th class="r">Pris</th><th class="r">Värde</th><th class="r">Resultat</th><th>Motivering</th></tr></thead>
     <tbody>${T.map(t => `<tr>
       <td class="num">${when(t.tid)}</td>
-      <td><span class="tag ${t.handling}">${NAMN[t.handling] || t.handling}</span> ${esc(t.ticker)}${t.havstang > 1 ? ` <span class="num">${n(t.havstang, 1)}x</span>` : ""}${t.strategi ? `<br><span class="tag">${esc(t.strategi)}</span>` : ""}</td>
+      <td><span class="tag ${t.handling}">${NAMN[t.handling] || t.handling}</span> ${esc(t.ticker)}${t.havstang > 1 ? ` <span class="num">${n(t.havstang, 1)}x</span>` : ""}<br><span class="tag">${esc(t.typ || "Aktier")}</span>${t.strategi ? ` <span class="tag">${esc(t.strategi)}</span>` : ""}</td>
       <td class="r num">${n(t.antal, 0)}</td>
       <td class="r num">${n(t.pris)} ${esc(t.valuta)}</td>
       <td class="r num">${kr(t.varde_sek)}<br><span style="color:var(--muted)">avg ${kr(t.avgift_sek, 2)}</span></td>

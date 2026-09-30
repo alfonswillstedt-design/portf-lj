@@ -9,10 +9,22 @@ def _latest_price(conn, ticker: str):
     return conn.execute("SELECT * FROM prices WHERE ticker=? ORDER BY hamtad DESC LIMIT 1", (ticker,)).fetchone()
 
 
+def instrument_type(ticker: str, cfg: dict, havstang: float = 1.0, antal: float = 1.0) -> str:
+    """Grupp på dashboarden: Aktier, Fonder & ETF:er, Krypto eller Hävstång & blankning."""
+    if havstang > 1 or antal < 0:
+        return "Hävstång & blankning"
+    if ticker in (cfg.get("krypto_etp") or {}):
+        return "Krypto"
+    if ticker in (cfg.get("fonder_etf") or {}):
+        return "Fonder & ETF:er"
+    return "Aktier"
+
+
 def build(conn, agent_id: str = "carl") -> dict:
     now = datetime.now(timezone.utc)
     acc = conn.execute("SELECT * FROM accounts WHERE agent_id=?", (agent_id,)).fetchone()
-    start_kap = float(config.load()["startkapital_sek"])
+    cfg = config.load()
+    start_kap = float(cfg["startkapital_sek"])
     kassa = acc["kassa_sek"] if acc else start_kap
 
     pos_out, total = [], kassa
@@ -33,6 +45,7 @@ def build(conn, agent_id: str = "carl") -> dict:
             "resultat_procent": 100 * res / p["insats_sek"] if p["insats_sek"] else 0,
             "likvidationspris": liquidation_price(p, fx),
             "pristid": pr["pristid"] if pr else None, "strategi": p["strategi"],
+            "typ": instrument_type(p["ticker"], cfg, p["havstang"], p["antal"]),
         })
 
     rnd = conn.execute("SELECT * FROM rounds WHERE agent_id=? AND status='aktiv' ORDER BY id DESC LIMIT 1",
@@ -50,6 +63,9 @@ def build(conn, agent_id: str = "carl") -> dict:
     trades = [dict(r) for r in conn.execute(
         """SELECT id, tid, handling, ticker, antal, pris, valuta, varde_sek, avgift_sek, havstang, resultat_sek,
                   strategi, motivering, lardom FROM trades WHERE agent_id=? ORDER BY id DESC LIMIT 300""", (agent_id,))]
+    for t in trades:
+        t["typ"] = instrument_type(t["ticker"], cfg, t["havstang"] or 1.0,
+                                   -1 if t["handling"] in ("short", "cover") else 1)
     last = conn.execute("SELECT * FROM sessions WHERE agent_id=? AND slut IS NOT NULL ORDER BY id DESC LIMIT 1",
                         (agent_id,)).fetchone()
     pagar = conn.execute("SELECT id, start FROM sessions WHERE agent_id=? AND slut IS NULL ORDER BY id DESC LIMIT 1",

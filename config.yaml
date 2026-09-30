@@ -36,6 +36,15 @@ krypto_etp:
   VALOUR-ETH-0-SEK.ST: Valour Ethereum Zero (SEK)
   VALOUR-SOL-SEK.ST: Valour Solana (SEK)
 
+# Fonder och ETF:er (börshandlade fonder). Används för att gruppera innehav på dashboarden.
+# Allt som inte står här eller under krypto_etp räknas som aktie.
+fonder_etf:
+  QQQ: Invesco QQQ (Nasdaq-100)
+  SMH: VanEck Semiconductor ETF
+  SPY: SPDR S&P 500 ETF
+  XACT-OMXS30.ST: XACT OMXS30
+  XACT-NORDEN.ST: XACT Norden
+
 # --- Börser: öppettider i lokal tid ---
 # Ticker-suffix avgör vilken börs en aktie hör till. Inget suffix = USA.
 borser:

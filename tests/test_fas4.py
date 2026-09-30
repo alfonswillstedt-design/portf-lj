@@ -30,3 +30,13 @@ def test_dashboard_data_och_html(world):
     assert "/*__CARL_DATA__*/" not in html and "</script> test" not in html   # ingen script-injektion
     blob = html.split("const EMBEDDED = ", 1)[1].split(";\nconst TZ", 1)[0]
     assert json.loads(blob.replace("<\\/", "</"))["totalt"] == pytest.approx(d["totalt"])
+
+
+def test_instrument_type_grupperar_innehav():
+    from carl.dashboard_data import instrument_type
+    cfg = {"krypto_etp": {"BITCOIN-XBT.ST": "x"}, "fonder_etf": {"QQQ": "x"}}
+    assert instrument_type("VOLV-B.ST", cfg) == "Aktier"
+    assert instrument_type("QQQ", cfg) == "Fonder & ETF:er"
+    assert instrument_type("BITCOIN-XBT.ST", cfg) == "Krypto"
+    assert instrument_type("VOLV-B.ST", cfg, havstang=3) == "Hävstång & blankning"
+    assert instrument_type("VOLV-B.ST", cfg, antal=-10) == "Hävstång & blankning"
