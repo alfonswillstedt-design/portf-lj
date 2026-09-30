@@ -68,3 +68,6 @@ bevakningslista:
   norden: [NOVO-B.CO, DSV.CO, NOKIA.HE, NESTE.HE, EQNR.OL, DNB.OL]
   usa: [AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AVGO, AMD, JPM, LLY, NFLX, PLTR]
   krypto_etp: [BITCOIN-XBT.ST, ETHEREUM-XBT.ST]
+  # Mindre kända bolag (mid/small cap, First North, nischade USA-bolag) – leta här varje session.
+  dolda: [MYCR.ST, BIOA-B.ST, SECT-B.ST, BETS-B.ST, NCAB.ST, SDIP-B.ST, CAMX.ST, HANZA.ST, MTRS.ST,
+          TRUE-B.ST, XVIVO.ST, NOTE.ST, KOG.OL, NOD.OL, NKT.CO, CRDO, ALAB, VRT, RKLB, HIMS, AXON, IONQ]

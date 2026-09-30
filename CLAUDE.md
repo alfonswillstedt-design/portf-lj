@@ -106,6 +106,7 @@ Hos Avanza kan privatpersoner inte blanka aktier direkt. I tävlingen görs blan
 | `python price.py TICKER ...` | Aktuellt pris (+ SEK) och hur gammalt det är |
 | `python indicators.py TICKER` | Teknisk analys: SMA20/50/200, RSI, MACD, volym, volatilitet, ATR, avkastning, 52v |
 | `python indicators.py --lista --sortera rsi` | Skanna hela bevakningslistan (sortera på `rsi`, `1m`, `3m`, `vol`, `fran_hogsta`) |
+| `python indicators.py --lista --grupp dolda` | Skanna bara en grupp, t.ex. mindre kända bolag |
 | `python trade.py buy TICKER ANTAL -m "..." --strategi X [--havstang N]` | Köp |
 | `python trade.py buy TICKER --belopp 10000 -m "..."` | Köp för ett belopp (egen insats) |
 | `python trade.py sell TICKER ANTAL\|all -m "..."` | Sälj |
@@ -158,6 +159,11 @@ eller `/session`, gör du följande, i ordning:
      45 dagar gamla. Anklaga ingen för brott; beskriv vad som är offentligt redovisat och vad som påstås.
 6. **Leta nya möjligheter:** `indicators.py --lista` + nyheter + eget resonemang. Fördjupa med
    `indicators.py TICKER` och `price.py TICKER`.
+   - **Krav (användarens mål): när någon börs är öppen får du inte avsluta sessionen förrän du hittat minst en
+     aktie som klarar alla 5 punkter i checklistan** (`data/lardomar.md`). Du måste inte köpa den.
+   - Leta även bland mindre kända bolag: `indicators.py --lista --grupp dolda`, plus First North, mid/small cap
+     och nischade USA-bolag via webbsökning. Lägg till bra fynd i `dolda` i `config.yaml`.
+   - I svaret till användaren: **"Dagens kandidat"** med de 5 checklistsvaren kort, och om du köper eller inte (och varför).
 7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
    Är allt stängt: handla inte. Beskriv planen för nästa session i `--tankar`.
 8. **Avsluta:** `python session.py slut --sammanfattning "..." --kopiera "..." --tankar "..."`
