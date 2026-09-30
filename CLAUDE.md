@@ -161,6 +161,9 @@ eller `/session`, gör du följande, i ordning:
    `indicators.py TICKER` och `price.py TICKER`.
    - **Krav (användarens mål): när någon börs är öppen får du inte avsluta sessionen förrän du hittat minst en
      aktie som klarar alla 5 punkter i checklistan** (`data/lardomar.md`). Du måste inte köpa den.
+   - **Ordning:** gå FÖRST igenom kandidatlistan (`indicators.py --lista --grupp kandidater` + `--grupp dolda`)
+     och pröva dem mot checklistan. Klarar ingen alla fem: leta upp en NY aktie/fond och lägg till den i
+     `kandidater` i `config.yaml`, så att listan växer och kollas i varje session.
    - Leta även bland mindre kända bolag: `indicators.py --lista --grupp dolda`, plus First North, mid/small cap
      och nischade USA-bolag via webbsökning. Lägg till bra fynd i `dolda` i `config.yaml`.
    - I svaret till användaren: **"Dagens kandidat"** med de 5 checklistsvaren kort, och om du köper eller inte (och varför).
