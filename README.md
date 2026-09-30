@@ -23,6 +23,10 @@ Carls dashboard är en privat webbsida som uppdateras efter varje session:
 Om Carl i framtiden körs som eget program finns en live-version (uppdateras var 5:e sekund):
 `pip install fastapi uvicorn` och sedan `python dashboard/app.py`, öppna http://127.0.0.1:8000.
 
+## Flera chattar
+Alla chattar delar minne via huvudgrenen `claude/zealous-galileo-d3iiyk`. Problem skrivs i `data/problem.md`.
+Huvudchatten ("admin chatten") kör `python admin.py` för att se läget i alla chattar och fixa det som strular.
+
 ## Installation (bara om man vill köra själv – behövs inte för att använda Carl)
 ```
 pip install -r requirements.txt

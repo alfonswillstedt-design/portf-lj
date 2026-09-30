@@ -136,6 +136,7 @@ likvidationspriset visas i `portfolio.py status`.
 När användaren skriver något i stil med **"Carl, kör en session"**, **"CG kör"**, **"Carl-Gustaf, dags att handla"**
 eller `/session`, gör du följande, i ordning:
 
+0. **Synka minnet:** `git fetch origin && git merge origin/claude/zealous-galileo-d3iiyk` (se *Flera chattar*).
 1. **Starta:** `python session.py start`. Det kontrollerar marknaderna, uppdaterar priser, drar räntor, kollar
    likvidationer/konkurs och visar portföljen, statistiken och lärdomsfilen. Läs allt noga.
    - Står det 💥 haveri-analys saknas: skriv den först (`portfolio.py haveri`), se nedan.
@@ -167,8 +168,9 @@ eller `/session`, gör du följande, i ordning:
 10. **Uppdatera dashboarden:** `python dashboard/build.py` och publicera sedan `data/dashboard.html` med
     Artifact-verktyget till den befintliga adressen: `url: https://claude.ai/artifact/Hcw96AAhdVj2KwVcAwwcMh`.
     Skapa aldrig en ny sida, uppdatera alltid den här. Ge användaren länken i svaret.
-11. **Spara minnet:** `git add -A && git commit -m "Session N: ..." && git push -u origin <nuvarande gren>`.
-    Utan detta försvinner allt när molndatorn stängs.
+11. **Spara minnet:** `git add -A && git commit -m "Session N: ..."` och sedan
+    `git push -u origin HEAD && git push origin HEAD:claude/zealous-galileo-d3iiyk` (egen gren + huvudgrenen).
+    Utan detta försvinner allt när molndatorn stängs, och andra chattar ser inte vad du gjort.
 
 ### Konkurs
 Om kontot faller under 100 kr: konkurs. Räknaren ökar (det är straffet, och det syns på dashboarden),
@@ -181,6 +183,29 @@ Var brutalt ärlig. Analysen sparas permanent.
 - **Var femte session** (🧹-påminnelsen): skriv om filen för hand. Uppdatera avsnittet
   *Kärnlärdomar* med de viktigaste, generella insikterna (max ca 15 punkter), och ta bort gamla loggposter
   som redan finns sammanfattade. **Radera aldrig haveri-analyser (💥).**
+
+---
+
+## Flera chattar och huvudchatten (VIKTIGT)
+Användaren kan ha flera chattar igång. Alla delar samma minne via GitHub, och en av dem är **huvudchatten**
+("admin chatten"), som felsöker och fixar det som strular i de andra. Huvudchatten ser allt som pushas till
+GitHub men kan inte läsa din chatt. Därför:
+- **Huvudgren:** `claude/zealous-galileo-d3iiyk`. Det är GitHubs standardgren och Carls gemensamma minne.
+- **Före allt annat i varje chatt och session:** `git fetch origin && git merge origin/claude/zealous-galileo-d3iiyk`.
+  Då har du senaste portfölj, lärdomar och kodfixar. Blir det konflikt i `data/carl.db`: ta den version som har
+  flest affärer (nyast), aldrig en blandning, och skriv det i problemloggen.
+- **När du sparar (steg 11):** pusha till din egen gren **och** till huvudgrenen:
+  `git push -u origin HEAD && git push origin HEAD:claude/zealous-galileo-d3iiyk`. Nekas pushen till huvudgrenen
+  för att den har ändrats: kör merge-steget ovan igen och försök en gång till.
+- **Bara en chatt handlar åt gången.** Två chattar som handlar samtidigt skapar två olika portföljer.
+- **Problemloggen `data/problem.md`:** när något inte går att genomföra (ett verktyg som blockeras, ett pris som
+  inte går att hämta, en order som avvisas av oklar anledning, en krasch, en push som nekas) skriver du en rad
+  under *Olösta*: datum och tid, din gren, vad du försökte, vad som hände och felmeddelandet ordagrant.
+  Committa och pusha direkt, även mitt i en session. Säg till användaren att huvudchatten kan ta det.
+  Kan du inte ens committa: skriv felet i chatten så att användaren kan klistra in det i huvudchatten.
+- **Om du är huvudchatten:** kör `python admin.py` för överblick över alla grenar (senaste aktivitet,
+  olösta problem, portfölj per gren), och `list_sessions`/`get_session` för chattarnas status. Fixa olösta
+  problem, bocka av dem under *Lösta* med en rad om lösningen, och pusha till huvudgrenen.
 
 ---
 

@@ -79,11 +79,17 @@ _NAMN = {"buy": "KÖP", "sell": "SÄLJ", "short": "BLANKA", "cover": "KÖP TILLB
 
 
 def copy_list(ctx: Ctx, session_id: int) -> list[str]:
-    rows = ctx.conn.execute("SELECT * FROM trades WHERE session_id=? ORDER BY id", (session_id,)).fetchall()
+    # Även affärer som gjorts i chatten mellan sessioner (utan session) sedan förra sessionen avslutades
+    prev = previous_session(ctx, session_id)
+    rows = ctx.conn.execute(
+        "SELECT * FROM trades WHERE agent_id=? AND (session_id=? OR (session_id IS NULL AND tid >= ?)) ORDER BY id",
+        (ctx.agent_id, session_id, prev["slut"] if prev else "")).fetchall()
     out = []
     for t in rows:
         s = (f"{_NAMN[t['handling']]} {t['antal']:g} st {t['ticker']} à ca {sv(t['pris'])} {t['valuta']}"
              f" (≈ {sv(t['varde_sek'], 0)} kr)")
+        if t["session_id"] is None:
+            s += " [gjord mellan sessioner]"
         if t["havstang"] > 1:
             s += f", hävstång {t['havstang']:g}x"
         if t["handling"] in ("short", "cover") or (t["havstang"] > 1 and t["handling"] in ("buy", "sell")):

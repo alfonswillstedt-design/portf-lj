@@ -95,3 +95,15 @@ def test_session_och_att_kopiera(world):
     journal.start_session(ctx())
     r2 = journal.end_session(ctx(), "Lugnt.", None, None)
     assert "Inga affärer" in r2["att_kopiera"] and r2["sedan_forra"] == pytest.approx(0, abs=0.01)
+
+
+def test_affarer_mellan_sessioner_kommer_med_i_listan(world):
+    conn, m, ctx = world
+    journal.start_session(ctx())
+    journal.end_session(ctx(), "Första.", None, None)
+    engine.open_position(ctx(), "VOLV-B.ST", 10, motivering="i chatten, utan session")
+    journal.start_session(ctx())
+    engine.open_position(ctx(), "ERIC-B.ST", 20)
+    r = journal.end_session(ctx(), "Andra.", None, None)
+    assert "KÖP 10 st VOLV-B.ST" in r["att_kopiera"] and "mellan sessioner" in r["att_kopiera"]
+    assert "KÖP 20 st ERIC-B.ST" in r["att_kopiera"]
