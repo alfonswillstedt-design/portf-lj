@@ -159,14 +159,16 @@ eller `/session`, gör du följande, i ordning:
      45 dagar gamla. Anklaga ingen för brott; beskriv vad som är offentligt redovisat och vad som påstås.
 6. **Leta nya möjligheter:** `indicators.py --lista` + nyheter + eget resonemang. Fördjupa med
    `indicators.py TICKER` och `price.py TICKER`.
-   - **Krav (användarens mål): när någon börs är öppen får du inte avsluta sessionen förrän du hittat minst en
-     aktie som klarar alla 5 punkter i checklistan** (`data/lardomar.md`). Du måste inte köpa den.
+   - **Krav (användarens mål): när någon börs är öppen är målet 5 kandidater som klarar alla 5 punkter i
+     checklistan** (`data/lardomar.md`), **absolut minst 3**. Fler än 5 är bra. Avsluta inte sessionen förrän
+     minst 3 är hittade. Du måste inte köpa dem.
    - **Ordning:** gå FÖRST igenom kandidatlistan (`indicators.py --lista --grupp kandidater` + `--grupp dolda`)
-     och pröva dem mot checklistan. Klarar ingen alla fem: leta upp en NY aktie/fond och lägg till den i
+     och pröva dem mot checklistan. Hittar du färre än 3 (helst 5): leta upp NYA aktier/fonder och lägg till den i
      `kandidater` i `config.yaml`, så att listan växer och kollas i varje session.
    - Leta även bland mindre kända bolag: `indicators.py --lista --grupp dolda`, plus First North, mid/small cap
      och nischade USA-bolag via webbsökning. Lägg till bra fynd i `dolda` i `config.yaml`.
-   - I svaret till användaren: **"Dagens kandidat"** med de 5 checklistsvaren kort, och om du köper eller inte (och varför).
+   - I svaret till användaren: **"Dagens kandidater"** (3–5+) med de 5 checklistsvaren kort för varje, och om du
+     köper eller inte (och varför).
 7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
    Är allt stängt: handla inte. Beskriv planen för nästa session i `--tankar`.
 8. **Avsluta:** `python session.py slut --sammanfattning "..." --kopiera "..." --tankar "..."`
