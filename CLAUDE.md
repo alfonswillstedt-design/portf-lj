@@ -56,7 +56,7 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
 
 ---
 
-## Tradingfredagar (start 2026-10-02)
+## Tradingfredagar (första blir 2026-10-09; 2/10 inställd, användaren jobbar)
 På fredagar kör Carl och användaren korta affärer tillsammans, med syftet att **lära användaren** hur marknaden fungerar.
 - Användaren skriver när hen vill stämma av (inga automatiska avstämningar). Fredag 2/10 är hen upptagen
   10:15–11:35 (skola) och kanske 16:00–18:00 (jobb).
