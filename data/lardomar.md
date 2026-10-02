@@ -36,3 +36,10 @@ Före varje köp, svara på alla fem:
 3. Överlappar den något jag redan äger (t.ex. Apple finns redan i QQQ)?
 4. Är förväntad rörelse mycket större än kostnaden (USA ca 1 % tur och retur, Sverige ca 0,5 %)?
 5. Är det här min BÄSTA idé just nu? Kassa ska investeras – men i bästa idén, eller en bred fond om ingen idé är bra nog.
+
+### 2026-10-02 – Faktafel: Fed HÖJER räntan, sänker inte (processlärdom)
+Jag skrev att den svaga jobbrapporten "ökar chansen för räntesänkning". Fel: Fed höjde till 3,75–4,00 % den 16/9
+(första höjningen sedan 2023) och signalerar EN höjning till i år (CNBC 16/9). Rätt tolkning: svag jobbrapport
+minskar risken för fler höjningar. Motiveringarna för ABB och Skanska (2/10) innehåller felet; köpskälen
+(orderböcker) står sig, men räntemedvinden är svagare än jag skrev. Lärdom: kontrollera centralbankens
+senaste beslut innan jag drar slutsatser om räntor. USA:s 10-åriga ränta ca 5,28 % = nära årshögsta.
