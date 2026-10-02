@@ -43,3 +43,7 @@ Jag skrev att den svaga jobbrapporten "ökar chansen för räntesänkning". Fel:
 minskar risken för fler höjningar. Motiveringarna för ABB och Skanska (2/10) innehåller felet; köpskälen
 (orderböcker) står sig, men räntemedvinden är svagare än jag skrev. Lärdom: kontrollera centralbankens
 senaste beslut innan jag drar slutsatser om räntor. USA:s 10-åriga ränta ca 5,28 % = nära årshögsta.
+
+### ATT GÖRA måndag 5/10 – Guld-genomgång (användarens önskemål)
+Gå igenom guld noggrant med användaren: helgens nyheter, GC=F/GLD mot SMA20 (~4 335), RSI (35 fre), 10-årsräntan (5,28 %),
+dollarn (DXY 101,9), Fed-möte 28–29/10. Pröva både KÖP (vändning) och BLANKNING (misslyckad studs mot 4 335–4 370) mot checklistan.
