@@ -44,6 +44,7 @@ fonder_etf:
   SPY: SPDR S&P 500 ETF
   XACT-OMXS30.ST: XACT OMXS30
   XACT-NORDEN.ST: XACT Norden
+  GLD: SPDR Gold Shares (guld-ETF)
 
 # --- Börser: öppettider i lokal tid ---
 # Ticker-suffix avgör vilken börs en aktie hör till. Inget suffix = USA.
@@ -71,7 +72,7 @@ bevakningslista:
   # KANDIDATLISTAN: aktier/fonder vi pratat om. Gås igenom FÖRST varje session. Nya fynd läggs till här.
   kandidater: [SAAB-B.ST, SEB-A.ST, ATCO-A.ST, MYCR.ST, SWED-A.ST, SHB-A.ST, ABB.ST, VOLV-B.ST, EQNR.OL,
                NOVO-B.CO, BITCOIN-XBT.ST, NVDA, META, AAPL, MSFT, AMD, MU, QQQ, SMH,
-               CAMX.ST, NOD.OL, HANZA.ST, KOG.OL, ADDT-B.ST, SKA-B.ST]
+               CAMX.ST, NOD.OL, HANZA.ST, KOG.OL, ADDT-B.ST, SKA-B.ST, GLD]
   # Mindre kända bolag (mid/small cap, First North, nischade USA-bolag) – leta här varje session.
   dolda: [MYCR.ST, BIOA-B.ST, SECT-B.ST, BETS-B.ST, NCAB.ST, SDIP-B.ST, CAMX.ST, HANZA.ST, MTRS.ST,
           TRUE-B.ST, XVIVO.ST, NOTE.ST, KOG.OL, NOD.OL, NKT.CO, CRDO, ALAB, VRT, RKLB, HIMS, AXON, IONQ]
