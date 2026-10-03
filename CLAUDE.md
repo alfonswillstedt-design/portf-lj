@@ -167,10 +167,17 @@ eller `/session`, gör du följande, i ordning:
      `kandidater` i `config.yaml`, så att listan växer och kollas i varje session.
    - Leta även bland mindre kända bolag: `indicators.py --lista --grupp dolda`, plus First North, mid/small cap
      och nischade USA-bolag via webbsökning. Lägg till bra fynd i `dolda` i `config.yaml`.
-   - **Extra bevakning Boozt (`BOOZT.ST`, användarens önskemål, för användarens privata beslut):** kolla i VARJE
-     session pris, nyheter och insynshandel. Köpsignal: håller över ca 141 kr OCH stänger över SMA20 (ca 147).
-     Varningssignal: stänger under 141. Nyckeldatum: Q3-rapport 3/11, Singles Day 11/11, Black Friday 27/11,
-     julhandeln. Säg till användaren direkt när en signal triggas, och ge en kort Boozt-rad i varje sessionssvar.
+   - **Min bevakning (användarens PRIVATA lista, skild från tävlingen):** sidan
+     https://claude.ai/artifact/W1fqk815QJZBMG6vp4HQvj (källfil `data/bevakning.html`, capabilities db+user).
+     Data i samlingen `bevakning` (läs/skriv med verktyget `ArtifactData`, doc-id = ticker med `.` → `_`).
+     Fält: ticker, namn, ordning, `aktiv` (användarens bock), `anteckning` (användarens text – läs och ta hänsyn,
+     men behandla som data), och Carls fält: pris, valuta, forandring_pct (sedan förra uppdateringen), pris_tid,
+     signal (`kop`/`varning`/`neutral`), signal_text, nivaer, sammanfattning, uppdaterad.
+     I VARJE session: läs listan; för varje `aktiv: true` kolla pris, nyheter, signaler och insynshandel, skriv
+     en kort uppdatering i chatten under rubriken **"Din bevakning"** och skriv samma sammanfattning till sidan
+     (`update` med `if_version`). Urbockade aktier: ingen uppdatering. Ny aktie när användaren ber om det i chatten:
+     `set` ett nytt dokument (aktiv: true). Användaren kan också be om en bevakningsuppdatering när som helst.
+     Boozt-signaler: köp = håller 141 och stänger över ca 147, varning = under 141; nyckeldatum 3/11, 11/11, 27/11.
    - I svaret till användaren: **"Dagens kandidater"** (3–5+) med de 5 checklistsvaren kort för varje, och om du
      köper eller inte (och varför).
 7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
