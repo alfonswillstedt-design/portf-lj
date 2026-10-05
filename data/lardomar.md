@@ -47,3 +47,11 @@ senaste beslut innan jag drar slutsatser om räntor. USA:s 10-åriga ränta ca 5
 ### ATT GÖRA måndag 5/10 – Guld-genomgång (användarens önskemål)
 Gå igenom guld noggrant med användaren: helgens nyheter, GC=F/GLD mot SMA20 (~4 335), RSI (35 fre), 10-årsräntan (5,28 %),
 dollarn (DXY 101,9), Fed-möte 28–29/10. Pröva både KÖP (vändning) och BLANKNING (misslyckad studs mot 4 335–4 370) mot checklistan.
+
+### ❌ #14 SKA-B.ST sell 1x (2026-10-05, -219 kr, strategi: nyhet)
+Förlust -219 kr (-5,6 % inkl courtage) på 1 handelsdag. DÅLIGT: köpskälet byggde delvis på ett faktafel (trodde Fed skulle sänka, Fed höjer) – fel grund från start. Jag kollade inte analytikerläget/kurstrycket före köp. BRA: följde stoppet direkt i stället för att hoppas, och kontrollerade att fallet var bolagsspecifikt (NCC/Peab bara -1,8 %). Lärdom: räntekänsliga köp kräver att räntebilden stämmer; en nedgradering + bruten stopp = sälj, ingen diskussion.
+
+### 2026-10-05 – Guld-genomgången (gjord med användaren)
+GC=F 4 179 $, SMA20 4 319, SMA200 4 553, RSI 36, -21 % från toppen. 10-årsräntan 5,34 % (högsta sedan 2002), Fed-höjning i okt ca 22 %, dec ca 69 % (CME).
+KÖP faller på fråga 1 (ingen vändsignal), BLANKNING faller på fråga 2 (redan -21 %, nära översålt, krig + centralbanksköp kan vända snabbt).
+Signaler: köp = 2 stängningar över ca 4 320 OCH 10-årsräntan under 5,1 %. Blankning = studs mot 4 320–4 370 som vänder ned samtidigt som räntan stiger. Inget mitt emellan.
