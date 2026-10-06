@@ -177,7 +177,7 @@ eller `/session`, gör du följande, i ordning:
      en kort uppdatering i chatten under rubriken **"Din bevakning"** och skriv samma sammanfattning till sidan
      (`update` med `if_version`). Urbockade aktier: ingen uppdatering. Ny aktie när användaren ber om det i chatten:
      `set` ett nytt dokument (aktiv: true). Användaren kan också be om en bevakningsuppdatering när som helst.
-     Boozt-signaler: köp = håller 141 och stänger över ca 147, varning = under 141; nyckeldatum 3/11, 11/11, 27/11.
+     Boozt-signaler (användarens plan 6/10): köp hälften vid dipp 143–145 eller stängning över ca 147, bonus om den dyker mot 138–140 och vänder upp; stopp/varning = stängning under 140; nyckeldatum 3/11, 11/11, 27/11.
    - I svaret till användaren: **"Dagens kandidater"** (3–5+) med de 5 checklistsvaren kort för varje, och om du
      köper eller inte (och varför).
 7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
