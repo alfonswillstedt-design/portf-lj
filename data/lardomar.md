@@ -55,3 +55,6 @@ Förlust -219 kr (-5,6 % inkl courtage) på 1 handelsdag. DÅLIGT: köpskälet b
 GC=F 4 179 $, SMA20 4 319, SMA200 4 553, RSI 36, -21 % från toppen. 10-årsräntan 5,34 % (högsta sedan 2002), Fed-höjning i okt ca 22 %, dec ca 69 % (CME).
 KÖP faller på fråga 1 (ingen vändsignal), BLANKNING faller på fråga 2 (redan -21 %, nära översålt, krig + centralbanksköp kan vända snabbt).
 Signaler: köp = 2 stängningar över ca 4 320 OCH 10-årsräntan under 5,1 %. Blankning = studs mot 4 320–4 370 som vänder ned samtidigt som räntan stiger. Inget mitt emellan.
+
+### ❌ #16 SAAB-B.ST sell 1x (2026-10-06, -377 kr, strategi: trend)
+Förlust -377 kr (-3,8 % inkl courtage) på ca 9 dagar. DÅLIGT: köpte försvar efter en lång sektorrally när sektorn redan låg i nedtrend (under SMA200, -14 % på 6 mån) – tematiskt köp utan färsk bolagskatalysator. BRA: stoppet följdes, ingen flytt av stoppet trots frestelsen. Lärdom: köp inte en sektor i nedtrend bara för att temat (upprustning) låter starkt; kräv att aktien ligger över SMA200 eller har en konkret katalysator.
