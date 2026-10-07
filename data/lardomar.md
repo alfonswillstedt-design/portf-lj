@@ -58,3 +58,8 @@ Signaler: köp = 2 stängningar över ca 4 320 OCH 10-årsräntan under 5,1 %. B
 
 ### ❌ #16 SAAB-B.ST sell 1x (2026-10-06, -377 kr, strategi: trend)
 Förlust -377 kr (-3,8 % inkl courtage) på ca 9 dagar. DÅLIGT: köpte försvar efter en lång sektorrally när sektorn redan låg i nedtrend (under SMA200, -14 % på 6 mån) – tematiskt köp utan färsk bolagskatalysator. BRA: stoppet följdes, ingen flytt av stoppet trots frestelsen. Lärdom: köp inte en sektor i nedtrend bara för att temat (upprustning) låter starkt; kräv att aktien ligger över SMA200 eller har en konkret katalysator.
+
+### 2026-10-07 – Faktakontroll: Jefferies riktkurs för Skanska var 297, inte 200/235 (processlärdom)
+Den 5/10 skrev jag (från en sökning) att Jefferies satt riktkurs 200 och i en annan källa 235. Placera-telegrammet 5/10 säger 297 kr.
+Säljbeslutet stod sig ändå (stoppet bröts), men jag överdrev hotet. 7/10 höjde SEB Skanska till köp (riktkurs 300, "exceptionell orderingång" i Q3).
+Lärdom: verifiera analytikersiffror mot en primärkälla (Placera/Finwire-telegram) innan jag citerar dem.
