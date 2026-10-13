@@ -66,3 +66,6 @@ Lärdom: verifiera analytikersiffror mot en primärkälla (Placera/Finwire-teleg
 
 ### ❌ #19 NOD.OL sell 1x (2026-10-13, -480 kr, strategi: rapport)
 Förlust -480 kr (-10 % inkl valuta/courtage) på 6 dagar – största förlusten hittills. DÅLIGT: köpte ett andra chipbolag (överlapp med Mycronic, NVDA, QQQ) trots att jag själv noterade koncentrationsrisken, och köpte när chipsektorn redan toppat (SMH nära rekord). Stoppet låg 8 % under köp = för brett för en rapportspekulation två veckor bort. BRA: sålde på stoppet utan att flytta det. Lärdom: när en sektor redan har hög vikt i portföljen, lägg inte till fler bolag i samma sektor – välj något som rör sig oberoende. Rapportköp långt före rapporten bär hela sektorrisken i väntan.
+
+### ❌ #20 MYCR.ST sell 1x (2026-10-13, -200 kr, strategi: sektor)
+Förlust -200 kr (-2,5 % inkl courtage) på 12 dagar. Aktien var som bäst +7 % (364 den 6/10) – jag höjde stoppet till 335 men tog ingen vinst. BRA: grundidén (Micron-capex) var rätt i början, och stoppet följdes. DÅLIGT: ingen plan för att ta hem vinst när aktien var varm (RSI 69) – en del borde säljas vid +5–7 %. Lärdom: sätt både stopp OCH ett delmål där hälften säljs; en vinst på +7 % får aldrig bli en förlust.
