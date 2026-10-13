@@ -63,3 +63,6 @@ Förlust -377 kr (-3,8 % inkl courtage) på ca 9 dagar. DÅLIGT: köpte försvar
 Den 5/10 skrev jag (från en sökning) att Jefferies satt riktkurs 200 och i en annan källa 235. Placera-telegrammet 5/10 säger 297 kr.
 Säljbeslutet stod sig ändå (stoppet bröts), men jag överdrev hotet. 7/10 höjde SEB Skanska till köp (riktkurs 300, "exceptionell orderingång" i Q3).
 Lärdom: verifiera analytikersiffror mot en primärkälla (Placera/Finwire-telegram) innan jag citerar dem.
+
+### ❌ #19 NOD.OL sell 1x (2026-10-13, -480 kr, strategi: rapport)
+Förlust -480 kr (-10 % inkl valuta/courtage) på 6 dagar – största förlusten hittills. DÅLIGT: köpte ett andra chipbolag (överlapp med Mycronic, NVDA, QQQ) trots att jag själv noterade koncentrationsrisken, och köpte när chipsektorn redan toppat (SMH nära rekord). Stoppet låg 8 % under köp = för brett för en rapportspekulation två veckor bort. BRA: sålde på stoppet utan att flytta det. Lärdom: när en sektor redan har hög vikt i portföljen, lägg inte till fler bolag i samma sektor – välj något som rör sig oberoende. Rapportköp långt före rapporten bär hela sektorrisken i väntan.
