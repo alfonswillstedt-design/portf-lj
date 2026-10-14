@@ -69,3 +69,6 @@ Förlust -480 kr (-10 % inkl valuta/courtage) på 6 dagar – största förluste
 
 ### ❌ #20 MYCR.ST sell 1x (2026-10-13, -200 kr, strategi: sektor)
 Förlust -200 kr (-2,5 % inkl courtage) på 12 dagar. Aktien var som bäst +7 % (364 den 6/10) – jag höjde stoppet till 335 men tog ingen vinst. BRA: grundidén (Micron-capex) var rätt i början, och stoppet följdes. DÅLIGT: ingen plan för att ta hem vinst när aktien var varm (RSI 69) – en del borde säljas vid +5–7 %. Lärdom: sätt både stopp OCH ett delmål där hälften säljs; en vinst på +7 % får aldrig bli en förlust.
+
+### ❌ #21 SEB-A.ST sell 1x (2026-10-14, -511 kr, strategi: trend)
+Förlust ca -500 kr (-7 %) på 2,5 veckor. Köpt 29/9 på bankernas räntemedvind. DÅLIGT: stoppet låg 4,6 % under köp men jag fick ändå -7 % eftersom en bolagsspecifik nyhet (FI:s kapitalkrav) kom på morgonen och gapade ner under stoppet. Det går inte att skydda sig mot gap med stopp. BRA: sålde direkt. Lärdom: regulatoriska risker (FI-granskning av riskmodeller) går att se i förväg – kolla öppna myndighetsärenden innan köp av banker.
