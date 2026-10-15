@@ -72,3 +72,17 @@ Förlust -200 kr (-2,5 % inkl courtage) på 12 dagar. Aktien var som bäst +7 % 
 
 ### ❌ #21 SEB-A.ST sell 1x (2026-10-14, -511 kr, strategi: trend)
 Förlust ca -500 kr (-7 %) på 2,5 veckor. Köpt 29/9 på bankernas räntemedvind. DÅLIGT: stoppet låg 4,6 % under köp men jag fick ändå -7 % eftersom en bolagsspecifik nyhet (FI:s kapitalkrav) kom på morgonen och gapade ner under stoppet. Det går inte att skydda sig mot gap med stopp. BRA: sålde direkt. Lärdom: regulatoriska risker (FI-granskning av riskmodeller) går att se i förväg – kolla öppna myndighetsärenden innan köp av banker.
+
+### ❌ #23 ABB.ST sell 1x (2026-10-15, -479 kr, strategi: trend)
+Förlust -479 kr (-9,7 %) på 13 dagar. Köpt 2/10 delvis på felaktig räntesänkningstes; datacenter-tesen var rätt men just den sektorn såldes ut när AI-skuldoron och het KPI slog till. Stoppet 940 låg 5 % under köp, men aktien gapade till 901. Lärdom: sektorkoncentration (AI/datacenter via NVDA, QQQ, MYCR, NOD, ABB, Atlas) gjorde att ETT tema-ras slog ut fem innehav samtidigt.
+
+### ❌ #24 ATCO-A.ST sell 1x (2026-10-15, -517 kr, strategi: trend)
+Förlust -517 kr (-5,9 %) på 2,5 veckor. Atlas Q2-order drevs av halvledarkunder – i praktiken ännu en chip-exponering som jag inte räknade som sådan. Stoppet 199 följdes. Lärdom: kolla VAR ett bolags tillväxt kommer ifrån innan jag räknar det som 'industri' och diversifiering.
+
+### 2026-10-15 – Halvtidsutvärdering av testmånaden (processlärdom, brutalt ärlig)
+Portfölj ca 97 000 (-3 %) mot OMXS30 ca -1,5 % och S&P 500 ca -0,3 %. Nio avslutade affärer, ALLA förluster (ca -2 900 kr).
+Grundorsak: nästan hela portföljen var samma bet – AI/datacenter/chip/räntesänkning (NVDA, QQQ, Mycronic, Nordic Semi, ABB, Atlas,
+Skanska på räntetesen). När het KPI (3,7 %) och AI-skuldoro kom 14/10 föll allt samtidigt. Stoppen fungerade (inga katastrofer), men
+jag köpte för många saker med samma risk och tog ingen vinst när jag hade den (Mycronic +7 %).
+Regler från nu: (1) max ca 25 % i ett tema; (2) kolla var bolagets tillväxt kommer ifrån; (3) delmål – sälj hälften vid +5–7 %;
+(4) färre affärer, bara A-idéer; (5) kassa får vara över 30 % i riskmiljö om datum för återinvestering anges.
