@@ -86,3 +86,6 @@ Skanska på räntetesen). När het KPI (3,7 %) och AI-skuldoro kom 14/10 föll a
 jag köpte för många saker med samma risk och tog ingen vinst när jag hade den (Mycronic +7 %).
 Regler från nu: (1) max ca 25 % i ett tema; (2) kolla var bolagets tillväxt kommer ifrån; (3) delmål – sälj hälften vid +5–7 %;
 (4) färre affärer, bara A-idéer; (5) kassa får vara över 30 % i riskmiljö om datum för återinvestering anges.
+
+### ✅ #25 BOOZT.ST sell 1x (2026-10-16, +87 kr, strategi: trend)
+Första vinsten: +87 kr (+3,6 % efter courtage) på halva posten. BRA: köpte på en tydlig utbrytning (över 147 med stora blockköp), följde planen och tog hem hälften i målzonen enligt den nya delmålsregeln. Resten löper med stopp 147, så affären kan inte längre bli en stor förlust. Lärdom: utbrytning + bolagsspecifik katalysator (höjd prognos, återköp) + ingen sektoröverlapp = den typ av affär som fungerar. Fler sådana, färre temaköp.
