@@ -89,3 +89,6 @@ Regler från nu: (1) max ca 25 % i ett tema; (2) kolla var bolagets tillväxt ko
 
 ### ✅ #25 BOOZT.ST sell 1x (2026-10-16, +87 kr, strategi: trend)
 Första vinsten: +87 kr (+3,6 % efter courtage) på halva posten. BRA: köpte på en tydlig utbrytning (över 147 med stora blockköp), följde planen och tog hem hälften i målzonen enligt den nya delmålsregeln. Resten löper med stopp 147, så affären kan inte längre bli en stor förlust. Lärdom: utbrytning + bolagsspecifik katalysator (höjd prognos, återköp) + ingen sektoröverlapp = den typ av affär som fungerar. Fler sådana, färre temaköp.
+
+### ❌ #26 NVDA sell 1x (2026-10-19, -519 kr, strategi: trend)
+Förlust -519 kr (-7,4 % inkl courtage och valuta). DÅLIGT: Nvidia var en del av den för stora AI/chip-klumpen (NVDA + QQQ + Mycronic + NOD + ABB/Atlas med chipberoende) – samma grundorsak som de andra förlusterna. Köpt nära toppen utan konkret ny katalysator. BRA: följde stängningsregeln och sålde in i en studs (217,7 mot stängning 214), vilket sparade ca 35 kr. Lärdom: max 25 % per tema gäller även 'indirekt' exponering; ett tema som faller tar alla positioner med sig samtidigt.
