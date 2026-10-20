@@ -92,3 +92,9 @@ Första vinsten: +87 kr (+3,6 % efter courtage) på halva posten. BRA: köpte p�
 
 ### ❌ #26 NVDA sell 1x (2026-10-19, -519 kr, strategi: trend)
 Förlust -519 kr (-7,4 % inkl courtage och valuta). DÅLIGT: Nvidia var en del av den för stora AI/chip-klumpen (NVDA + QQQ + Mycronic + NOD + ABB/Atlas med chipberoende) – samma grundorsak som de andra förlusterna. Köpt nära toppen utan konkret ny katalysator. BRA: följde stängningsregeln och sålde in i en studs (217,7 mot stängning 214), vilket sparade ca 35 kr. Lärdom: max 25 % per tema gäller även 'indirekt' exponering; ett tema som faller tar alla positioner med sig samtidigt.
+
+### ✅ #27 EQNR.OL sell 1x (2026-10-20, +346 kr, strategi: sektor)
+Vinst +346 kr (+5,4 % efter courtage) – största vinsten hittills. BRA: följde delmålsregeln, och oljetemat var en motvikt mot AI/chip-klumpen (fungerade som hedge när tech föll). DÅLIGT: missade 19/10 med en minut för att jag inte sålde direkt vid Oslos öppning, och fick i dag 432,20 i stället för ~437–438 i går – kostade ca 70 kr. Lärdom: affärer på börser som stänger tidigt (Oslo 16:20) läggs FÖRST i sessionen, och planerade säljorder görs direkt när börsen öppnar.
+
+### ❌ #28 META sell 1x (2026-10-20, -588 kr, strategi: trend)
+Förlust -588 kr (-8,1 % inkl courtage och valuta). DÅLIGT: ännu en del av AI/tech-klumpen (Meta överlappar dessutom QQQ, fråga 3 i checklistan). Köpt nära toppen utan färsk katalysator, och stoppet (690, -5,4 %) var för vitt för en position som redan överlappade. BRA: sålde direkt när stoppet bröts i stället för att hoppas på rapporten. Lärdom: en enskild aktie som redan finns i en fond jag äger ska ha ett skarpare skäl och tightare stopp – annars dubblar jag bara samma risk.
