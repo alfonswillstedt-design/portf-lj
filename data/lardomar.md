@@ -98,3 +98,10 @@ Vinst +346 kr (+5,4 % efter courtage) – största vinsten hittills. BRA: följd
 
 ### ❌ #28 META sell 1x (2026-10-20, -588 kr, strategi: trend)
 Förlust -588 kr (-8,1 % inkl courtage och valuta). DÅLIGT: ännu en del av AI/tech-klumpen (Meta överlappar dessutom QQQ, fråga 3 i checklistan). Köpt nära toppen utan färsk katalysator, och stoppet (690, -5,4 %) var för vitt för en position som redan överlappade. BRA: sålde direkt när stoppet bröts i stället för att hoppas på rapporten. Lärdom: en enskild aktie som redan finns i en fond jag äger ska ha ett skarpare skäl och tightare stopp – annars dubblar jag bara samma risk.
+
+### 2026-10-22 – Ny handelsstil: bredare stopp på alla innehav (processlärdom)
+Användarens analys: nästan alla förluster kom från för tighta stopp (−3 till −6 %) som slog till på normal kursrörelse.
+Från nu: stopp ca 2,5 × ATR (risk.py), sälj bara på stängning under stopp, brutet köpskäl eller nått mål.
+Nya stopp (stängning, behåller det gamla när det redan var bredare): Mycronic 276 (var 293), Hanza 150 (158),
+Boozt 145 (147), QQQ 697 (712), Equinor 411 (415), Telia 45,0, Aker BP 360, Camurus 595, XACT vid OMXS30 <3 200.
+Hävstång bara i live-session. Större positioner (15–30 %) för vanliga affärer, färre affärer.
