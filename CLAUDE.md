@@ -61,8 +61,9 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
   15:45 USA öppnat, 17:15 före Stockholms stängning, 20:00 kvällsläge, 21:45 före USA:s stängning,
   plus lördag ca 10 (veckoanalys, ingen handel). Varje påminnelse = notis + kort chattsvar, ingen session.
   Användaren skriver "CG kör" för en längre session (ca en halvtimme) och kan köra fler gånger än så.
-- **Skärpta regler:** max ca 5 nya köp per vecka, max 2 positioner i samma tema (och max 25 % per tema).
-  Affärer över 15 000 kr eller med hävstång tas upp med användaren först.
+- **Inga fasta gränser, inget godkännande** (användarens beslut 22/10): Carl gör alla affärer själv i
+  simuleringen. Lärdomarna (t.ex. koncentration i ett tema) är omdöme, inte spärrar. Användarens mål:
+  att kunna lita på Carl utan att behöva kolla. Det kräver bevisat resultat i simuleringen först.
 - **Testmånad 2:** testmånad 1 utvärderas 28/10 som planerat. Från 2026-10-29 körs en ny testmånad med
   det nya upplägget, så att före och efter kan jämföras.
 - **Betaltjänster/analyser** (t.ex. Stockrobers Patreon om användaren köper den): användaren klistrar in.
