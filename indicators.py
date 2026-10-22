@@ -3,6 +3,7 @@
   python indicators.py VOLV-B.ST              # detaljerad analys av en ticker
   python indicators.py VOLV-B.ST AAPL NVDA    # jämförelsetabell
   python indicators.py --lista                # hela bevakningslistan i config.yaml
+  python indicators.py --lista --grupp dolda  # bara en grupp (t.ex. mindre kända bolag)
   python indicators.py --lista --sortera rsi  # sortera (rsi, 1m, 3m, vol, fran_hogsta)
 """
 import sys
@@ -62,9 +63,12 @@ def table(tickers: list[str], sortera: str | None) -> int:
 
 def main(args: list[str]) -> int:
     sortera = args[args.index("--sortera") + 1] if "--sortera" in args else None
-    args = [a for a in args if a not in ("--sortera", sortera)]
+    grupp_namn = args[args.index("--grupp") + 1] if "--grupp" in args else None
+    args = [a for a in args if a not in ("--sortera", sortera, "--grupp", grupp_namn)]
     if "--lista" in args:
         bl = config.load().get("bevakningslista", {})
+        if grupp_namn:
+            bl = {grupp_namn: bl.get(grupp_namn, [])}
         tickers = [t for grupp in bl.values() for t in grupp]
         return table(tickers, sortera)
     if not args:

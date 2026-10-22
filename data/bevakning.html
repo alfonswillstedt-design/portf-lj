@@ -1,0 +1,215 @@
+<title>Min bevakning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: en smal kolumn med ett kort per aktie; bock till vänster, Carls senaste läge i mitten, dina anteckningar längst ner. */
+:root {
+  --bg: #f3f5f6;
+  --surface: #ffffff;
+  --line: #d9dfe3;
+  --ink: #17232b;
+  --ink-2: #4b5a64;
+  --muted: #7c8a94;
+  --accent: #23708c;
+  --accent-soft: #e2eff4;
+  --good: #1f8a52;
+  --good-soft: #e3f3ea;
+  --warn: #b5650d;
+  --warn-soft: #fbeedd;
+  --bad: #c0392b;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1519; --surface: #172026; --line: #283540; --ink: #e3eaee; --ink-2: #a9b7c0; --muted: #77868f;
+    --accent: #6cb4d0; --accent-soft: #1b3440; --good: #4cc282; --good-soft: #17302a; --warn: #e3a256; --warn-soft: #3a2b18; --bad: #ef6b5d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1519; --surface: #172026; --line: #283540; --ink: #e3eaee; --ink-2: #a9b7c0; --muted: #77868f;
+  --accent: #6cb4d0; --accent-soft: #1b3440; --good: #4cc282; --good-soft: #17302a; --warn: #e3a256; --warn-soft: #3a2b18; --bad: #ef6b5d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--sans); padding: 20px 16px 48px; }
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-direction: column; gap: 4px; }
+h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.lead { margin: 0; color: var(--ink-2); max-width: 60ch; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.count { font: 500 13px var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.filter { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.filter button { font: 500 13px var(--sans); color: var(--ink-2); background: transparent; border: 0; padding: 6px 12px; cursor: pointer; }
+.filter button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.filter button:focus-visible, .check:focus-within, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.list { display: flex; flex-direction: column; gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px 14px; }
+.card.off { opacity: 0.62; }
+.card.off .detail { display: none; }
+.check { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; border: 2px solid var(--line); cursor: pointer; position: relative; }
+.check input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.check svg { width: 18px; height: 18px; opacity: 0; }
+.check.on { background: var(--accent); border-color: var(--accent); }
+.check.on svg { opacity: 1; }
+.check svg path { stroke: var(--surface); }
+.head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; justify-content: space-between; min-width: 0; }
+.name { font-weight: 600; font-size: 17px; }
+.ticker { font: 400 12px var(--mono); color: var(--muted); margin-left: 6px; letter-spacing: 0.02em; }
+.price { font: 500 15px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chg { font: 500 13px var(--mono); margin-left: 6px; }
+.chg.up { color: var(--good); } .chg.down { color: var(--bad); }
+.detail { grid-column: 2; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 3px 10px; border-radius: 999px; width: fit-content; max-width: 100%; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.pill.kop { background: var(--good-soft); color: var(--good); }
+.pill.varning { background: var(--warn-soft); color: var(--warn); }
+.pill.neutral { background: var(--accent-soft); color: var(--accent); }
+.levels { font: 400 13px var(--mono); color: var(--ink-2); }
+.summary { margin: 0; color: var(--ink); max-width: 65ch; }
+.meta { font-size: 12px; color: var(--muted); }
+.notes label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+textarea { width: 100%; min-height: 64px; resize: vertical; font: 14px/1.45 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.saved { font-size: 12px; color: var(--muted); min-height: 1em; }
+.empty, .notice { background: var(--surface); border: 1px dashed var(--line); border-radius: 10px; padding: 20px; color: var(--ink-2); }
+.notice strong, .empty strong { color: var(--ink); }
+footer { font-size: 12px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .card { transition: opacity .15s; } .check { transition: background .15s, border-color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Min bevakning</h1>
+    <p class="lead">Bocka i de aktier du vill att Carl håller extra koll på. Bara ibockade får uppdateringar i chatten och här. Det här är din privata lista, skild från tävlingen.</p>
+  </header>
+
+  <div class="bar">
+    <span class="count" id="count">Laddar…</span>
+    <div class="filter" role="group" aria-label="Visa">
+      <button type="button" id="f-alla" aria-pressed="true">Alla</button>
+      <button type="button" id="f-ibockade" aria-pressed="false">Bara ibockade</button>
+    </div>
+  </div>
+
+  <div id="notice" class="notice" hidden></div>
+  <div class="list" id="list">
+    <div class="empty"><strong>Listan hämtas.</strong> Vill du lägga till en aktie, skriv till Carl i chatten, till exempel "lägg till Volvo i min bevakning".</div>
+  </div>
+
+  <footer>Carl uppdaterar sammanfattningarna i varje session. Anteckningar sparas automatiskt och Carl läser dem.</footer>
+</div>
+
+<script>
+const fmt = (v, d = 2) => v == null || v === "" ? "–" : Number(v).toLocaleString("sv-SE", { minimumFractionDigits: d, maximumFractionDigits: d });
+const when = iso => { if (!iso) return ""; try { return new Date(iso).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); } catch { return iso; } };
+const SIGNAL = { kop: "Köpsignal", varning: "Varning", neutral: "Bevakas" };
+let rows = [], filter = "alla", db = null, canWrite = true;
+try { if (localStorage.getItem("bev-filter") === "ibockade") filter = "ibockade"; } catch {}
+
+const listEl = document.getElementById("list");
+const tmr = {};
+
+function setFilter(f) {
+  filter = f;
+  document.getElementById("f-alla").setAttribute("aria-pressed", f === "alla");
+  document.getElementById("f-ibockade").setAttribute("aria-pressed", f === "ibockade");
+  try { localStorage.setItem("bev-filter", f); } catch {}
+  render();
+}
+document.getElementById("f-alla").onclick = () => setFilter("alla");
+document.getElementById("f-ibockade").onclick = () => setFilter("ibockade");
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function card(r) {
+  const c = el("article", "card" + (r.aktiv ? "" : " off"));
+  c.dataset.id = r.id;
+  const chk = el("label", "check" + (r.aktiv ? " on" : ""));
+  const inp = document.createElement("input");
+  inp.type = "checkbox"; inp.id = "chk-" + r.id; inp.checked = !!r.aktiv; inp.disabled = !canWrite;
+  inp.setAttribute("aria-label", "Bevaka " + (r.namn || r.ticker));
+  inp.onchange = async () => {
+    r.aktiv = inp.checked; render();
+    try { await db.doc("bevakning/" + r.id).update({ aktiv: inp.checked, aktiv_tid: new Date().toISOString() }); }
+    catch (e) { showNotice("Kunde inte spara bocken. Försök igen om en stund."); }
+  };
+  chk.append(inp);
+  chk.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+
+  const head = el("div", "head");
+  const nm = el("div"); nm.append(el("span", "name", r.namn || r.ticker), el("span", "ticker", r.ticker));
+  const pr = el("div", "price");
+  pr.textContent = r.pris != null ? fmt(r.pris) + " " + (r.valuta || "") : "–";
+  if (r.forandring_pct != null) {
+    const ch = el("span", "chg " + (r.forandring_pct >= 0 ? "up" : "down"), (r.forandring_pct >= 0 ? "+" : "") + fmt(r.forandring_pct, 1) + " %");
+    pr.append(ch);
+  }
+  head.append(nm, pr);
+
+  const det = el("div", "detail");
+  if (r.signal) det.append(el("span", "pill " + r.signal, (SIGNAL[r.signal] || "Bevakas") + (r.signal_text ? ": " + r.signal_text : "")));
+  if (r.nivaer) det.append(el("div", "levels", r.nivaer));
+  det.append(el("p", "summary", r.sammanfattning || "Carl har inte skrivit någon sammanfattning än. Den kommer i nästa session."));
+  if (r.uppdaterad) det.append(el("div", "meta", "Carls senaste uppdatering: " + when(r.uppdaterad) + (r.pris_tid ? " · pris från " + when(r.pris_tid) : "")));
+
+  const notes = el("div", "notes");
+  const lab = el("label", null, "Dina anteckningar till Carl"); lab.htmlFor = "note-" + r.id;
+  const ta = document.createElement("textarea"); ta.id = "note-" + r.id; ta.value = r.anteckning || ""; ta.disabled = !canWrite;
+  ta.placeholder = "T.ex. säg till om den går under 140";
+  const sv = el("div", "saved", r.anteckning_tid ? "Sparad " + when(r.anteckning_tid) : "");
+  ta.oninput = () => {
+    sv.textContent = "Sparar…";
+    clearTimeout(tmr[r.id]);
+    tmr[r.id] = setTimeout(async () => {
+      const now = new Date().toISOString();
+      try { await db.doc("bevakning/" + r.id).update({ anteckning: ta.value, anteckning_tid: now }); r.anteckning = ta.value; r.anteckning_tid = now; sv.textContent = "Sparad " + when(now); }
+      catch { sv.textContent = "Kunde inte spara. Försök igen."; }
+    }, 800);
+  };
+  notes.append(lab, ta, sv);
+  det.append(notes);
+
+  const right = el("div"); right.style.minWidth = "0"; right.append(head);
+  c.append(chk, right, det);
+  return c;
+}
+
+function render() {
+  const n = rows.filter(r => r.aktiv).length;
+  document.getElementById("count").textContent = rows.length ? `${n} ibockade av ${rows.length}` : "Inga aktier än";
+  const active = document.activeElement && document.activeElement.tagName === "TEXTAREA" ? document.activeElement.id : null;
+  const caret = active ? document.activeElement.selectionStart : 0;
+  const shown = rows.filter(r => filter === "alla" || r.aktiv).sort((a, b) => (b.aktiv - a.aktiv) || ((a.ordning ?? 99) - (b.ordning ?? 99)));
+  listEl.replaceChildren();
+  if (!rows.length) {
+    listEl.append(Object.assign(el("div", "empty"), { innerHTML: "<strong>Inga aktier i listan än.</strong> Skriv till Carl i chatten, till exempel \"lägg till Boozt i min bevakning\", så dyker den upp här." }));
+  } else if (!shown.length) {
+    listEl.append(Object.assign(el("div", "empty"), { innerHTML: "<strong>Inget är ibockat.</strong> Välj Alla och bocka i de aktier du vill följa." }));
+  }
+  shown.forEach(r => listEl.append(card(r)));
+  if (active) { const t = document.getElementById(active); if (t) { t.focus(); try { t.setSelectionRange(caret, caret); } catch {} } }
+}
+
+function showNotice(msg) { const n = document.getElementById("notice"); n.textContent = msg; n.hidden = false; }
+
+(async () => {
+  db = window.claude ? await window.claude.use("db") : null;
+  if (!db) {
+    document.getElementById("count").textContent = "";
+    listEl.replaceChildren(Object.assign(el("div", "empty"), { innerHTML: "<strong>Listan kunde inte hämtas.</strong> Öppna sidan inloggad i Claude för att se och ändra din bevakning." }));
+    return;
+  }
+  try { const u = await window.claude.use("user"); if (u && u.can) { const w = await u.can("data.write"); if (w === false) canWrite = false; } } catch {}
+  db.collection("bevakning").onSnapshot(snap => {
+    const focused = document.activeElement && document.activeElement.tagName === "TEXTAREA";
+    rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (focused) {
+      const id = document.activeElement.id.replace("note-", "");
+      const local = document.activeElement.value;
+      const r = rows.find(x => x.id === id); if (r) r.anteckning = local;
+    }
+    render();
+  }, () => showNotice("Kontakten med listan bröts. Ladda om sidan."));
+})();
+</script>
