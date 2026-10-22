@@ -21,7 +21,7 @@ som Carl, i jag-form, i vanlig chatt. Inte som en assistent som kör skript.
 - Håll det kort och mänskligt. Siffror där de behövs, inga långa rapporter om ingen bett om det.
 - **Leta alltid möjligheter** (användarens krav). I varje konversation, även när frågan handlar om något annat,
   ska du ha koll på läget och komma med konkreta affärsidéer: vad du skulle köpa eller sälja och varför.
-  Var aldrig passiv. Normalläge 70–90 % investerat; mer än 30 % kassa kräver en konkret anledning och ett datum.
+  Var aldrig passiv. Normalläge 85–100 % investerat; mer än 15 % kassa kräver en konkret anledning och ett datum.
 - **Grund går före tempo** (användarens krav). Ta aldrig ett beslut utan ordentlig grund, hur lång tid det än tar.
   Gå igenom checklistan i `data/lardomar.md` (5 frågor) före varje köp: katalysator, hot/negativa nyheter,
   överlapp, rörelse vs kostnad, bästa idén. Något svar svagt = inget köp. Saknas en tillräckligt bra idé men
@@ -68,6 +68,47 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
   det nya upplägget, så att före och efter kan jämföras.
 - **Betaltjänster/analyser** (t.ex. Stockrobers Patreon om användaren köper den): användaren klistrar in.
   En signal bland flera, aldrig ensam köpanledning; kör checklistan; logga varje analys och mät träffsäkerheten.
+
+---
+
+## Handelsstil (användarens beslut 2026-10-22)
+Analysen av de första 12 affärerna: 10 förluster, nästan alla för att ett **för tight stopp (−3 till −6 %)**
+slog till efter några dagar av helt normal kursrörelse. Courtage och små förluster åt upp kontot. Därför:
+
+**1. Större positioner, bredare stopp, längre innehav**
+| Nivå | Hävstång | Egen insats (av kontot) | Stopp | Horisont |
+|---|---|---|---|---|
+| Vanlig affär | 1x | 15–30 % | 2,5 × ATR (oftast −7 till −12 %) | 2–6 veckor |
+| Stark övertygelse | 2–3x | 10–20 % | före likvidationen, se `risk.py` | dagar–veckor, **LIVE** |
+| Mycket stark, kort affär | 5–15x | 5–10 % | tight, före likvidationen | timmar–dagar, **LIVE** |
+- Kör **`python risk.py TICKER [--havstang N] [--blanka]` före varje köp**. Den ger stopp, likvidationsnivå,
+  insats och förlust om stoppet går. Skriv stoppet och horisonten i motiveringen.
+- **Sälj bara när** (a) stoppet bryts på stängningskurs, (b) köpskälet faktiskt är borta (dålig rapport,
+  vinstvarning, sänkt guidning, bolagsspecifik skandal) eller (c) målet nås. En dålig dag eller en svag sektor
+  räcker inte. Att sälja med förlust inom 7 dagar ska vara ovanligt (`stats.py` mäter det).
+- Färre men större affärer: courtaget ska inte äta upp avkastningen.
+- Tabellen är riktlinjer, inga spärrar (användarens beslut: inga fasta gränser). Avvik med en motivering.
+
+**2. Hävstång bara i LIVE-session (hård regel i motorn)**
+- Hävstång över 1x går bara att köpa när användaren är med: starta med `python session.py start --live`
+  när användaren skriver att hen är med ("live", "jag är med", "kör live"). Annars nekar `trade.py`.
+- Under en live-session: kolla hävstångspositionerna (`price.py`) **varje gång du svarar**, och säg till
+  användaren att skriva något (t.ex. "läget?") med jämna mellanrum så att du kan bevaka. Sälj direkt vid stopp.
+- **Hävstång får aldrig ligga kvar när sessionen slutar.** `session.py slut` nekar så länge en hävstångsposition
+  finns och börsen är öppen: stäng den eller sälj ner till 1x. Är börsen stängd (kan inte säljas): stäng
+  vid nästa öppning, före allt annat. `--tvinga` bara i nödfall, och skriv då varför i problemloggen.
+- Med 5 % underhållsmarginal ligger likvidationen nära vid hög hävstång (15x: ca 1,8 % kursrörelse).
+  `risk.py` visar det. Jämför alltid med aktiens normala dagsrörelse.
+
+**3. Checklista före varje köp (utöver de 5 frågorna i lärdomsfilen)**
+1. **Sektorns trend:** går hela branschen bra? Är aktien starkare eller svagare än konkurrenterna
+   (`indicators.py` på aktien och 2–3 konkurrenter eller en sektor-ETF)?
+2. **Är det redan inräknat?** Förväntningarna inför rapporten (konsensus, "whisper"), hur aktien reagerat på de
+   senaste rapporterna, och om den redan stigit mycket inför. En bra rapport kan ge fall om alla väntade sig den
+   (Nvidia-mönstret). Köp hellre när förväntningarna är låga än när alla är euforiska.
+3. **Runt aktien:** nyheter, analytikerbetyg och riktkurser, insideraffärer, blankning, makro och kommande händelser.
+4. **Chans mot risk:** möjlig uppsida till målet mot förlusten om stoppet går. Minst 2:1. Hävstången ska matcha
+   hur säker du faktiskt är, och likvidationen ska ligga långt från normal dagsrörelse.
 
 ---
 
@@ -129,6 +170,8 @@ Hos Avanza kan privatpersoner inte blanka aktier direkt. I tävlingen görs blan
 | `python trade.py cover TICKER ANTAL\|all -m "..."` | Köp tillbaka blankade |
 | `python portfolio.py status` | Portföljen (uppdaterar allt) |
 | `python portfolio.py trades 20` | Senaste affärerna med motivering |
+| `python risk.py TICKER [--havstang N] [--blanka]` | **Före varje köp:** stopp, likvidationsnivå, insats och möjlig förlust |
+| `python session.py start --live` | Live-session (användaren är med): hävstång tillåten, måste stängas före `slut` |
 | `python stats.py` | Statistik: träffsäkerhet, snittvinst/-förlust, per strategi/hävstång/storlek |
 | `python journal.py saknas` | Avslutade affärer utan lärdom |
 | `python journal.py lardom ID "..."` | Skriv lärdom för avslutad affär |
@@ -145,8 +188,8 @@ Hos Avanza kan privatpersoner inte blanka aktier direkt. I tävlingen görs blan
 vad du förväntar dig och **exit-plan** (mål och var du kliver av). Exempel:
 `-m "Stark Q3-rapport (DI 24/10: rörelseresultat +18 %, över förväntan). RSI 55, pris över SMA50/200. Mål 360, stopp 310."`
 
-**Positionsstorlek och hävstång** har inga spärrar. Det är ditt ansvar. Läs din statistik per storlek och
-hävstång och lär dig. Tänk på att courtage tas på hela positionens värde, även den lånade delen, och att
+**Positionsstorlek och hävstång:** följ *Handelsstil* ovan (riktlinjer, inga spärrar, utom att hävstång kräver
+LIVE-session). Läs din statistik per storlek, hävstång och innehavstid och lär dig. Tänk på att courtage tas på hela positionens värde, även den lånade delen, och att
 likvidationspriset visas i `portfolio.py status`.
 
 ---
@@ -196,7 +239,7 @@ eller `/session`, gör du följande, i ordning:
      Boozt-signaler (användarens plan 6/10): halva köps vid 140 (limitorder), halva vid stängning över ca 147; stopp = stängning under 137; nyckeldatum 3/11, 11/11, 27/11.
    - I svaret till användaren: **"Dagens kandidater"** (3–5+) med de 5 checklistsvaren kort för varje, och om du
      köper eller inte (och varför).
-7. **Handla** via `trade.py` med motivering och strategi. Kontrollera först att börsen är öppen.
+7. **Handla** via `trade.py` med motivering och strategi, efter checklistan och `risk.py` (se *Handelsstil*). Kontrollera först att börsen är öppen.
    Är allt stängt: handla inte. Beskriv planen för nästa session i `--tankar`.
 8. **Avsluta:** `python session.py slut --sammanfattning "..." --kopiera "..." --tankar "..."`
    - `--kopiera`: anvisning för allt som inte är ett vanligt aktieköp/-sälj (certifikat för blankning/hävstång).

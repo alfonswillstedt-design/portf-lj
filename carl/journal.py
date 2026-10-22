@@ -3,7 +3,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .engine import Ctx, TradeError, active_session, days_left, snapshot, today_se, active_round
+from . import markets
+from .engine import (Ctx, TradeError, active_round, active_session, days_left, leveraged_positions,
+                     snapshot, today_se)
 
 LARDOMAR_MALL = """# Carl-Gustafs lärdomar
 
@@ -48,14 +50,17 @@ def read_lessons(ctx: Ctx) -> str:
 
 # ---------------------------------------------------------------- sessioner
 
-def start_session(ctx: Ctx) -> tuple:
-    """Startar en session (eller återupptar en som inte avslutats). Returnerar (session, nummer, ny)."""
+def start_session(ctx: Ctx, live: bool = False) -> tuple:
+    """Startar en session (eller återupptar en som inte avslutats). Returnerar (session, nummer, ny).
+    live=True: användaren är med hela tiden, och då (bara då) är hävstång tillåten."""
     s = active_session(ctx)
     ny = s is None
     if ny:
-        ctx.conn.execute("INSERT INTO sessions(agent_id, start, startvarde_sek) VALUES (?,?,?)",
-                         (ctx.agent_id, ctx.now.isoformat(), snapshot(ctx).totalt_sek))
-        s = active_session(ctx)
+        ctx.conn.execute("INSERT INTO sessions(agent_id, start, startvarde_sek, live) VALUES (?,?,?,?)",
+                         (ctx.agent_id, ctx.now.isoformat(), snapshot(ctx).totalt_sek, int(live)))
+    elif live and not s["live"]:
+        ctx.conn.execute("UPDATE sessions SET live=1 WHERE id=?", (s["id"],))
+    s = active_session(ctx)
     nr = ctx.conn.execute("SELECT COUNT(*) FROM sessions WHERE agent_id=? AND id<=?", (ctx.agent_id, s["id"])).fetchone()[0]
     return s, nr, ny
 
@@ -98,10 +103,20 @@ def copy_list(ctx: Ctx, session_id: int) -> list[str]:
     return out
 
 
-def end_session(ctx: Ctx, sammanfattning: str, kopiera_anvisning: str | None, tankar: str | None) -> dict:
+def end_session(ctx: Ctx, sammanfattning: str, kopiera_anvisning: str | None, tankar: str | None,
+                tvinga: bool = False) -> dict:
     s = active_session(ctx)
     if not s:
         raise TradeError("Ingen aktiv session. Starta med: python session.py start")
+    # Hävstång får inte bli kvar när användaren går: stäng (eller sälj ner till 1x) först.
+    varningar = []
+    for p in leveraged_positions(ctx):
+        st = markets.status(markets.exchange_for(p["ticker"]), ctx.now)
+        if st.oppen and not tvinga:
+            raise TradeError(f"{p['ticker']} har {p['havstang']:.1f}x hävstång och börsen är öppen. Hävstång får "
+                             "inte ligga kvar när sessionen slutar: stäng positionen först.")
+        varningar.append(f"{p['ticker']} ligger kvar med {p['havstang']:.1f}x hävstång"
+                         + (" (börsen stängd, stäng vid nästa öppning)" if not st.oppen else " (TVINGAT avslut)"))
     snap = snapshot(ctx)
     lista = copy_list(ctx, s["id"])
     kopiera = "\n".join(f"{i}. {x}" for i, x in enumerate(lista, 1)) or "Inga affärer denna session – gör ingenting."
@@ -124,4 +139,5 @@ def end_session(ctx: Ctx, sammanfattning: str, kopiera_anvisning: str | None, ta
         "tankar": tankar,
         "sammanfattning": sammanfattning,
         "datum": str(today_se(ctx)),
+        "varningar": varningar,
     }

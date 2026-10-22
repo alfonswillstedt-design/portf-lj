@@ -106,6 +106,11 @@ def active_session(ctx: Ctx) -> sqlite3.Row | None:
                             (ctx.agent_id,)).fetchone()
 
 
+def leveraged_positions(ctx: Ctx) -> list[sqlite3.Row]:
+    """Positioner med hävstång över 1x (de som bara får finnas under en live-session)."""
+    return [p for p in positions(ctx) if p["havstang"] > 1.0001]
+
+
 def today_se(ctx: Ctx) -> date:
     return ctx.now.astimezone(markets.SE_TZ).date()
 
@@ -283,6 +288,11 @@ def open_position(ctx: Ctx, ticker: str, antal: float, riktning: str = "lång", 
         raise TradeError("Antal måste vara ett positivt heltal.")
     if havstang < 1:
         raise TradeError("Hävstång måste vara minst 1.")
+    if havstang > 1:
+        sess = active_session(ctx)
+        if not sess or not sess["live"]:
+            raise TradeError("Hävstång över 1x är bara tillåten i en LIVE-session där användaren är med och kan "
+                             "hålla Carl igång (python session.py start --live). Ingen order lagd.")
     handling = "buy" if riktning == "lång" else "short"
     warn = _check_can_trade(ctx, ticker)
     q, fx = ctx.quote(ticker)  # PriceError om priset inte går att hämta -> ingen affär
@@ -374,6 +384,8 @@ def close_position(ctx: Ctx, ticker: str, antal: float | None = None, motivering
                     account(ctx)["kassa_sek"], warn)
     _log_trade(ctx, r, strategi or pos["strategi"], motivering, q.alder_sekunder, session_id,
                pos["andel_procent"])
+    hallen = (ctx.now - datetime.fromisoformat(pos["oppnad"])).total_seconds() / 86400
+    ctx.conn.execute("UPDATE trades SET hallen_dagar=? WHERE id=last_insert_rowid()", (round(hallen, 2),))
     return r
 
 

@@ -35,6 +35,14 @@ def world(tmp_path):
     conn.close()
 
 
+@pytest.fixture
+def lworld(world):
+    """Som world, men med en LIVE-session igång (krävs för hävstång)."""
+    from carl import journal
+    journal.start_session(world[2](), live=True)
+    return world
+
+
 def cash(c):
     return engine.account(c)["kassa_sek"]
 
@@ -121,7 +129,8 @@ def test_kan_inte_salja_det_man_inte_har(world):
         engine.open_position(ctx(), "VOLV-B.ST", 5, "blankad")
 
 
-def test_inga_tak_pa_storlek_eller_havstang(world):
+def test_inga_tak_pa_storlek_eller_havstang(lworld):
+    world = lworld
     _, _, ctx = world
     r = engine.open_position(ctx(), "VOLV-B.ST", 9700, havstang=10)   # 970 000 kr position på 97 000 kr insats
     assert r.varde_sek == 970000
@@ -129,7 +138,8 @@ def test_inga_tak_pa_storlek_eller_havstang(world):
 
 # ---------- Hävstång och likvidation ----------
 
-def test_havstang_vinst_forstarks(world):
+def test_havstang_vinst_forstarks(lworld):
+    world = lworld
     _, m, ctx = world
     engine.open_position(ctx(), "VOLV-B.ST", 500, havstang=2)       # 50 000 kr, 25 000 egen insats
     assert cash(ctx()) == pytest.approx(100000 - 25000 - 125)
@@ -139,7 +149,8 @@ def test_havstang_vinst_forstarks(world):
     assert s.totalt_sek == pytest.approx(100000 - 125 + 5000)
 
 
-def test_likvidationspris_lang(world):
+def test_likvidationspris_lang(lworld):
+    world = lworld
     _, _, ctx = world
     engine.open_position(ctx(), "VOLV-B.ST", 500, havstang=2)       # lån 25 000
     (p,) = engine.positions(ctx())
@@ -147,7 +158,8 @@ def test_likvidationspris_lang(world):
     assert p["likvidationspris"] == pytest.approx(25000 / 475)
 
 
-def test_lang_med_havstang_likvideras_korrekt(world):
+def test_lang_med_havstang_likvideras_korrekt(lworld):
+    world = lworld
     _, m, ctx = world
     engine.open_position(ctx(), "VOLV-B.ST", 500, havstang=2)
     m.p["VOLV-B.ST"] = (53.0, "SEK")                                 # strax över likvidation (52,63)
@@ -162,7 +174,8 @@ def test_lang_med_havstang_likvideras_korrekt(world):
     assert "MARGIN CALL" in t["motivering"]
 
 
-def test_kursras_forbi_likvidation_kontot_aldrig_under_noll(world):
+def test_kursras_forbi_likvidation_kontot_aldrig_under_noll(lworld):
+    world = lworld
     """Aktien rasar 90 % över en natt (långt förbi likvidationsnivån). Förlusten större än
     säkerheten får aldrig göra kontot negativt."""
     _, m, ctx = world
@@ -185,7 +198,8 @@ def test_blankning_vinst_nar_kursen_faller(world):
     assert cash(ctx()) == pytest.approx(100000 + 10000 - 125 - 100)
 
 
-def test_blankning_likvideras_nar_kursen_stiger(world):
+def test_blankning_likvideras_nar_kursen_stiger(lworld):
+    world = lworld
     _, m, ctx = world
     engine.open_position(ctx(), "ERIC-B.ST", 1000, "blankad", havstang=2)  # säkerhet 25 000
     (p,) = engine.positions(ctx())
@@ -196,7 +210,8 @@ def test_blankning_likvideras_nar_kursen_stiger(world):
     assert len(rep.likvidationer) == 1 and cash(ctx()) >= 0
 
 
-def test_blankningsavgift_och_laneranta_dras_over_tid(world):
+def test_blankningsavgift_och_laneranta_dras_over_tid(lworld):
+    world = lworld
     _, _, ctx = world
     engine.open_position(ctx(), "ERIC-B.ST", 1000, "blankad")        # 50 000 blankat
     engine.open_position(ctx(), "VOLV-B.ST", 200, havstang=2)       # lån 10 000
@@ -210,7 +225,8 @@ def test_blankningsavgift_och_laneranta_dras_over_tid(world):
 
 # ---------- Konkurs ----------
 
-def test_konkurs_haveri_analys_och_nollstallning(world):
+def test_konkurs_haveri_analys_och_nollstallning(lworld):
+    world = lworld
     conn, m, ctx = world
     engine.start_round(ctx())
     engine.open_position(ctx(), "VOLV-B.ST", 9700, havstang=10)
@@ -262,7 +278,8 @@ def test_kvartalsslut():
 
 # ---------- Stresstest: kontot går aldrig under 0 ----------
 
-def test_slumpmassiga_affarer_kontot_aldrig_negativt(world):
+def test_slumpmassiga_affarer_kontot_aldrig_negativt(lworld):
+    world = lworld
     import random
     rnd = random.Random(42)
     _, m, ctx = world
@@ -288,3 +305,49 @@ def test_slumpmassiga_affarer_kontot_aldrig_negativt(world):
             pass
         assert cash(c) >= 0
         assert engine.snapshot(c).totalt_sek >= 0
+
+
+# ---------- Hävstång bara i live-session ----------
+
+def test_havstang_kraver_live_session(world):
+    from carl import journal
+    _, _, ctx = world
+    with pytest.raises(engine.TradeError, match="LIVE"):
+        engine.open_position(ctx(), "VOLV-B.ST", 10, havstang=2)          # ingen session alls
+    journal.start_session(ctx())
+    with pytest.raises(engine.TradeError, match="LIVE"):
+        engine.open_position(ctx(), "VOLV-B.ST", 10, havstang=2)          # vanlig session
+    engine.open_position(ctx(), "VOLV-B.ST", 10)                           # 1x går alltid
+    journal.start_session(ctx(), live=True)                                # uppgradera till live
+    engine.open_position(ctx(), "ERIC-B.ST", 10, havstang=15)
+    assert len(engine.leveraged_positions(ctx())) == 1
+
+
+def test_session_kan_inte_avslutas_med_havstang_kvar(lworld):
+    from carl import journal
+    _, _, ctx = lworld
+    engine.open_position(ctx(), "ERIC-B.ST", 100, havstang=5)
+    with pytest.raises(engine.TradeError, match="hävstång"):
+        journal.end_session(ctx(), "x", None, None)
+    engine.close_position(ctx(), "ERIC-B.ST")
+    r = journal.end_session(ctx(), "Stängt.", None, None)
+    assert r["varningar"] == []
+
+
+def test_stangd_borse_ger_varning_inte_spärr(lworld):
+    from carl import journal
+    _, _, ctx = lworld
+    engine.open_position(ctx(), "ERIC-B.ST", 100, havstang=5)
+    r = journal.end_session(ctx(LORDAG + timedelta(days=7)), "Helg.", None, None)
+    assert "nästa öppning" in r["varningar"][0]
+
+
+def test_hallen_tid_sparas(world):
+    conn, _, ctx = world
+    engine.open_position(ctx(), "VOLV-B.ST", 10)
+    engine.close_position(ctx(MANDAG_10 + timedelta(days=3)), "VOLV-B.ST")
+    t = conn.execute("SELECT hallen_dagar FROM trades WHERE handling='sell'").fetchone()
+    assert t["hallen_dagar"] == pytest.approx(3)
+    from carl import stats
+    st = stats.compute(conn)
+    assert st.hallen_dagar == [pytest.approx(3)] and "Innehavstid: snitt 3.0" in stats.format_stats(st)

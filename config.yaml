@@ -77,3 +77,13 @@ bevakningslista:
   # Mindre kända bolag (mid/small cap, First North, nischade USA-bolag) – leta här varje session.
   dolda: [MYCR.ST, BIOA-B.ST, SECT-B.ST, BETS-B.ST, NCAB.ST, SDIP-B.ST, CAMX.ST, HANZA.ST, MTRS.ST,
           TRUE-B.ST, XVIVO.ST, NOTE.ST, KOG.OL, NOD.OL, NKT.CO, CRDO, ALAB, VRT, RKLB, HIMS, AXON, IONQ]
+
+# --- Handelsstil (riktlinjer, inga spärrar – Carl använder omdöme) ---
+# Används av risk.py för att föreslå stopp och storlek.
+handelsstil:
+  stopp_atr_multipel: 2.5        # vanligt stopp = 2,5 dagars normal rörelse (ATR) under köpet
+  stopp_fore_likvidation: 0.7    # med hävstång: stoppet läggs senast vid 70 % av vägen till likvidation
+  nivaer:
+    - {namn: "Vanlig affär", havstang: [1, 1], insats_procent: [15, 30], horisont: "2–6 veckor"}
+    - {namn: "Stark övertygelse", havstang: [2, 3], insats_procent: [10, 20], horisont: "dagar–veckor, LIVE"}
+    - {namn: "Mycket stark, kort affär", havstang: [5, 15], insats_procent: [5, 10], horisont: "timmar–dagar, LIVE"}

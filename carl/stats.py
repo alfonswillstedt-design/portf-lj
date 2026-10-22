@@ -51,6 +51,8 @@ class Stats:
     storsta_vinst: tuple | None = None
     storsta_forlust: tuple | None = None
     saknar_lardom: list = field(default_factory=list)
+    hallen_dagar: list = field(default_factory=list)      # per avslutad affär (där det är känt)
+    snabba_forlustsalj: int = 0                           # sålt med förlust inom 7 dagar
 
 
 def _lev_bucket(h: float) -> str:
@@ -99,6 +101,11 @@ def compute(conn, agent_id: str = "carl") -> Stats:
             st.storsta_forlust = (t["ticker"], r, t["tid"][:10])
         if not t["lardom"]:
             st.saknar_lardom.append(t)
+        hd = t["hallen_dagar"] if "hallen_dagar" in t.keys() else None
+        if hd is not None:
+            st.hallen_dagar.append(hd)
+            if hd < 7 and r < 0:
+                st.snabba_forlustsalj += 1
     acc = conn.execute("SELECT * FROM accounts WHERE agent_id=?", (agent_id,)).fetchone()
     if acc:
         st.konkurser, st.avgifter_sek = acc["konkurser"], acc["avgifter_sek"]
@@ -124,6 +131,11 @@ def format_stats(st: Stats) -> str:
             for grp in sorted(d.values(), key=lambda x: -x.summa):
                 out.append(f"  {grp.namn:<18} {grp.antal:>3} st  träff {grp.traffsakerhet:>3.0f} %  "
                            f"resultat {grp.summa:>+10,.0f} kr  snitt {grp.summa / grp.antal:>+8,.0f} kr")
+    if st.hallen_dagar:
+        snitt = sum(st.hallen_dagar) / len(st.hallen_dagar)
+        out.append(f"\nInnehavstid: snitt {snitt:.1f} dagar ({len(st.hallen_dagar)} affärer).  "
+                   f"Sålt med förlust inom 7 dagar: {st.snabba_forlustsalj} st "
+                   "(mål: få – ge affärerna tid, sälj bara när stoppet eller köpskälet bryts)")
     out.append(f"\nLikvidationer: {st.likvidationer}   KONKURSER: {st.konkurser}   Betalda avgifter: {st.avgifter_sek:,.0f} kr")
     if st.saknar_lardom:
         out.append(f"\n⚠ {len(st.saknar_lardom)} avslutade affärer saknar lärdom: "

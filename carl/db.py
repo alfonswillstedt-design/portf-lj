@@ -151,6 +151,8 @@ MIGRATIONS = [
     ("trades", "andel_procent", "REAL"),
     ("trades", "lardom", "TEXT"),
     ("positions", "andel_procent", "REAL"),
+    ("sessions", "live", "INTEGER NOT NULL DEFAULT 0"),   # 1 = användaren är med, hävstång tillåten
+    ("trades", "hallen_dagar", "REAL"),                   # hur länge positionen hölls (vid stängning)
 ]
 
 

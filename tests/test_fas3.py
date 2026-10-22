@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from carl import engine, indicators, journal, stats
-from test_fas2 import MANDAG_10, world  # noqa: F401  (fixture)
+from test_fas2 import MANDAG_10, lworld, world  # noqa: F401  (fixtures)
 
 
 def serie(values):
@@ -46,8 +46,8 @@ def test_for_kort_historik():
         indicators.summarize("T", serie([1, 2, 3]))
 
 
-def test_statistik_och_lardomar(world):
-    conn, m, ctx = world
+def test_statistik_och_lardomar(lworld):
+    conn, m, ctx = lworld
     engine.open_position(ctx(), "VOLV-B.ST", 100, strategi="momentum")
     m.p["VOLV-B.ST"] = (120.0, "SEK")
     vinst = engine.close_position(ctx(), "VOLV-B.ST")
@@ -77,14 +77,18 @@ def test_statistik_och_lardomar(world):
 def test_session_och_att_kopiera(world):
     conn, m, ctx = world
     engine.start_round(ctx(), engine.date(2026, 12, 31))
-    s, nr, ny = journal.start_session(ctx())
+    s, nr, ny = journal.start_session(ctx(), live=True)
     assert nr == 1 and ny
     s2, _, ny2 = journal.start_session(ctx())
     assert s2["id"] == s["id"] and not ny2                     # återupptas, ingen dubblett
     engine.open_position(ctx(), "VOLV-B.ST", 50, motivering="stark rapport")
     engine.open_position(ctx(), "ERIC-B.ST", 100, "blankad", havstang=3)
     m.p["VOLV-B.ST"] = (110.0, "SEK")
-    r = journal.end_session(ctx(), "Bra dag.", "Blankningen i ERIC görs med BEAR ERICSSON X3.", "Bevaka Volvo.")
+    with pytest.raises(engine.TradeError, match="hävstång"):
+        journal.end_session(ctx(), "x", None, None)                    # 3x-blankningen är kvar
+    r = journal.end_session(ctx(), "Bra dag.", "Blankningen i ERIC görs med BEAR ERICSSON X3.", "Bevaka Volvo.",
+                            tvinga=True)
+    assert "TVINGAT" in r["varningar"][0]
     assert "1. KÖP 50 st VOLV-B.ST à ca 100,00 SEK (≈ 5 000 kr)" in r["att_kopiera"]
     assert "2. BLANKA 100 st ERIC-B.ST" in r["att_kopiera"] and "certifikat" in r["att_kopiera"]
     assert "BEAR ERICSSON X3" in r["att_kopiera"]
@@ -93,8 +97,11 @@ def test_session_och_att_kopiera(world):
     assert engine.active_session(ctx()) is None
     # Nästa session utan affärer
     journal.start_session(ctx())
-    r2 = journal.end_session(ctx(), "Lugnt.", None, None)
-    assert "Inga affärer" in r2["att_kopiera"] and r2["sedan_forra"] == pytest.approx(0, abs=0.01)
+    with pytest.raises(engine.TradeError, match="hävstång"):          # kvarglömd hävstång stoppar avslutet
+        journal.end_session(ctx(), "Lugnt.", None, None)
+    engine.close_position(ctx(), "ERIC-B.ST")
+    r2 = journal.end_session(ctx(), "Stängde blankningen.", None, None)
+    assert "KÖP TILLBAKA" in r2["att_kopiera"] and r2["varningar"] == []
 
 
 def test_affarer_mellan_sessioner_kommer_med_i_listan(world):
@@ -107,3 +114,19 @@ def test_affarer_mellan_sessioner_kommer_med_i_listan(world):
     r = journal.end_session(ctx(), "Andra.", None, None)
     assert "KÖP 10 st VOLV-B.ST" in r["att_kopiera"] and "mellan sessioner" in r["att_kopiera"]
     assert "KÖP 20 st ERIC-B.ST" in r["att_kopiera"]
+
+
+def test_riskplan_havstang_och_stopp():
+    from carl import risk
+    # 15x lång: likvidation efter ca 6,3 % fall (1 - (14/15)/0.95)
+    assert risk.liquidation_move(15) == pytest.approx(1 - (14 / 15) / 0.95)
+    assert risk.liquidation_move(1) is None
+    h = serie(np.linspace(100, 130, 300) * (1 + 0.02 * np.sin(np.arange(300))))
+    p1 = risk.plan("T", h, 100000, 1)
+    assert p1.likvidation_pris is None and p1.stopp_pris < p1.pris
+    assert p1.insats_kr == (15000, 30000)
+    p15 = risk.plan("T", h, 100000, 15)
+    assert p15.stopp_procent < p15.likvidation_procent              # stoppet ligger före likvidationen
+    assert p15.insats_kr == (5000, 10000) and any("LIVE" in w for w in p15.varningar)
+    pb = risk.plan("T", h, 100000, 3, blankad=True)
+    assert pb.stopp_pris > pb.pris and pb.likvidation_pris > pb.pris

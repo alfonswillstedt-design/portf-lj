@@ -1,7 +1,9 @@
 """Carls sessioner.
 
   python session.py start                                   # briefing: marknader, portfölj, statistik, lärdomar
-  python session.py slut --sammanfattning "..." [--kopiera "..."] [--tankar "..."]
+  python session.py start --live                            # LIVE: användaren är med -> hävstång tillåten
+  python session.py slut --sammanfattning "..." [--kopiera "..."] [--tankar "..."] [--tvinga]
+                                                            # nekas om hävstång ligger kvar och börsen är öppen
   python session.py senaste                                 # visa senaste sessionens sammanfattning
 """
 import argparse
@@ -11,11 +13,17 @@ from carl import db, engine, journal, markets, stats
 from portfolio import print_status
 
 
-def start() -> int:
+def start(live: bool = False) -> int:
     with db.session() as conn:
         ctx = engine.Ctx(conn)
-        s, nr, ny = journal.start_session(ctx)
-        print(f"################ SESSION {nr} {'startad' if ny else 'ÅTERUPPTAGEN (förra avslutades inte)'} ################")
+        s, nr, ny = journal.start_session(ctx, live)
+        print(f"################ SESSION {nr} {'startad' if ny else 'ÅTERUPPTAGEN (förra avslutades inte)'}"
+              f"{' – LIVE (hävstång tillåten)' if s['live'] else ''} ################")
+        hav = engine.leveraged_positions(ctx)
+        if hav:
+            print("⚠ HÄVSTÅNG LIGGER KVAR: " + ", ".join(f"{p['ticker']} {p['havstang']:.1f}x" for p in hav)
+                  + (" – bevaka tätt och stäng innan sessionen slutar." if s["live"]
+                     else " – detta är INTE en live-session: stäng eller sälj ner till 1x så snart börsen är öppen."))
         print("\n--- MARKNADER ---")
         for m in markets.all_status(ctx.now):
             print(f"{m.namn:<20} " + (f"ÖPPEN (stänger {m.stanger:%H:%M})" if m.oppen
@@ -46,12 +54,13 @@ def slut(argv) -> int:
     ap.add_argument("--sammanfattning", required=True)
     ap.add_argument("--kopiera", help="anvisning för hur affärerna görs i tävlingen (t.ex. vilket certifikat)")
     ap.add_argument("--tankar", help="tankar inför nästa session")
+    ap.add_argument("--tvinga", action="store_true", help="avsluta trots kvarvarande hävstång (bara i nödfall)")
     a = ap.parse_args(argv)
     with db.session() as conn:
         ctx = engine.Ctx(conn)
         engine.update(ctx)
         try:
-            r = journal.end_session(ctx, a.sammanfattning, a.kopiera, a.tankar)
+            r = journal.end_session(ctx, a.sammanfattning, a.kopiera, a.tankar, a.tvinga)
         except engine.TradeError as e:
             print(f"AVVISAD: {e}")
             return 2
@@ -70,6 +79,8 @@ def print_summary(r: dict) -> None:
     print(r["att_kopiera"])
     if r.get("tankar"):
         print(f"\nInför nästa session: {r['tankar']}")
+    for w in r.get("varningar", []):
+        print(f"⚠ {w}")
 
 
 def senaste() -> int:
@@ -90,7 +101,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     cmd = args[0] if args else ""
     if cmd == "start":
-        sys.exit(start())
+        sys.exit(start("--live" in args))
     if cmd == "slut":
         sys.exit(slut(args[1:]))
     if cmd == "senaste":

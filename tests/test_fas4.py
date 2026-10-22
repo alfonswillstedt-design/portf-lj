@@ -11,11 +11,11 @@ from test_fas2 import world  # noqa: F401
 def test_dashboard_data_och_html(world):
     conn, m, ctx = world
     engine.start_round(ctx(), engine.date(2026, 12, 31))
-    journal.start_session(ctx())
+    journal.start_session(ctx(), live=True)
     engine.open_position(ctx(), "VOLV-B.ST", 100, motivering="Stark rapport </script> test")
     engine.open_position(ctx(), "ERIC-B.ST", 100, "blankad", havstang=2)
     engine.update(ctx())
-    journal.end_session(ctx(), "Test.", None, "Bevaka Volvo.")
+    journal.end_session(ctx(), "Test.", None, "Bevaka Volvo.", tvinga=True)
     m.p["VOLV-B.ST"] = (110.0, "SEK")
     engine.update(ctx())                        # sparar nytt pris i databasen
     d = dashboard_data.build(conn)
