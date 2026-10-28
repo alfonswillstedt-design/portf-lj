@@ -5,7 +5,17 @@ kärnlärdomarna uppdateras, gamla loggposter tas bort. Haveri-analyser (💥) r
 
 ## Kärnlärdomar (sammanfattat)
 
-- (inga än – Carl har inte handlat)
+- Koncentration dödar: AI/chip-klumpen (NVDA, Meta, QQQ, Mycronic, NOD, ABB/Atlas med chipberoende) föll samtidigt och stod för nästan hela minuset. Räkna även indirekt exponering i temat.
+- Kolla var tillväxten kommer ifrån (Atlas växte via halvledare = samma tema).
+- För tighta stopp (−3 till −6 %) slog till på normal rörelse. Stopp ca 2,5 × ATR, sälj på stängningskurs, brutet köpskäl eller nått mål – inte på en dålig dag.
+- Exit-disciplinen fungerar: alla 10 förluster såldes enligt plan (stopp eller brutet köpskäl) (Meta föll −9 % till efter att jag sålt). Problemet var köpen, inte säljen.
+- Delvinst (sälj halva vid +5–7 % / målzon) gav de enda vinsterna (Boozt, Equinor). Behåll regeln.
+- Köp inte nära toppar utan färsk katalysator; kolla om nyheten redan är inräknad (värdering, analytikerläge).
+- Courtage och valuta (~0,5 % per USA-affär) åt ca 1/5 av minuset: färre och större affärer.
+- Börser som stänger tidigt (Oslo 16:20) först i sessionen; planerade säljorder direkt vid öppning.
+- Vänta inte på nästa händelse med stor kassa – det finns alltid en. Bred indexfond hellre än kassa.
+- Kontrollera fakta (centralbanksbeslut, riktkurser) innan de används som motivering.
+- Olja/energi fungerade som motvikt när tech föll.
 
 ## Logg
 
@@ -105,3 +115,14 @@ Från nu: stopp ca 2,5 × ATR (risk.py), sälj bara på stängning under stopp, 
 Nya stopp (stängning, behåller det gamla när det redan var bredare): Mycronic 276 (var 293), Hanza 150 (158),
 Boozt 145 (147), QQQ 697 (712), Equinor 411 (415), Telia 45,0, Aker BP 360, Camurus 595, XACT vid OMXS30 <3 200.
 Hävstång bara i live-session. Större positioner (15–30 %) för vanliga affärer, färre affärer.
+
+
+### 2026-10-28 – 💯 UTVÄRDERING TESTMÅNAD 1 (28/9–28/10)
+Resultat: portföljen −3,3 % (96 716 kr) mot OMXS30 −1,0 % (3 263 mot 3 295) och S&P 500 −0,25 % (7 723 mot 7 742).
+Underkänt: efter båda index (−2,3 och −3,0 procentenheter). Ingen synk med tävlingsportföljen.
+Avslutade affärer 12: 2 vinster (delförsäljningar Boozt +87, Equinor +346), 10 förluster, realiserat −3 559 kr. Courtage 758 kr.
+Gick som motiveringen sa: 2 nådde målzonen, 10 stoppades. Exit-planerna följdes i 12 av 12 (två en dag sent: Nvidia, Equinor).
+Öppna innehav ca +270 kr orealiserat (Equinor +11 %, Camurus +6 %, Boozt +5 % bär; QQQ −3 %, Hanza −6 %).
+Grundorsak: dåliga köp (koncentration i AI/chip, köp nära toppar, för små positioner med för tighta stopp), inte dålig exit.
+Ärligt: en månad är kort, men 2 av 12 rätt är inte otur. Testmånad 2 (från 29/10) med ny handelsstil: bredare stopp,
+större och färre positioner, risk.py och chans/risk minst 2:1 före varje köp.
