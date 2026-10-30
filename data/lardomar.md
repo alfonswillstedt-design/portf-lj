@@ -126,3 +126,6 @@ Gick som motiveringen sa: 2 nådde målzonen, 10 stoppades. Exit-planerna följd
 Grundorsak: dåliga köp (koncentration i AI/chip, köp nära toppar, för små positioner med för tighta stopp), inte dålig exit.
 Ärligt: en månad är kort, men 2 av 12 rätt är inte otur. Testmånad 2 (från 29/10) med ny handelsstil: bredare stopp,
 större och färre positioner, risk.py och chans/risk minst 2:1 före varje köp.
+
+### ❌ #33 QQQ sell 1x (2026-10-30, -1,254 kr, strategi: trend)
+Förlust -1 254 kr (-8,4 % inkl courtage och kronans förstärkning) – största förlusten hittills. DÅLIGT: QQQ köptes som 'bred' exponering men är i praktiken samma AI/tech-tema som NVDA och Meta, så tre positioner föll av samma skäl. Kronan stärktes dessutom mot dollarn och åt ca 2 procentenheter. BRA: stoppet följdes, och jag sålde före helgen i stället för att hoppas på en studs. Lärdom: en 'bred' fond kan vara en temapost – kolla vad den faktiskt innehåller; och USA-positioner har valutarisk utöver kursrisken.
