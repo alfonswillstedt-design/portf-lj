@@ -57,10 +57,11 @@ Användaren vill att Carl först bevisar sig. Under testmånaden handlar Carl i 
 ---
 
 ## Nytt upplägg från 2026-10-22 (användarens beslut)
-- **Påminnelser** (ändrat 2/11, för att spara användning): bara två per vardag – när Stockholm öppnar (09:05)
-  och när USA öppnar (15:35 svensk tid). Notis + kort chattsvar, ingen session. Användaren skriver "CG kör"
-  för en session. De andra schemalagda påminnelserna (11:15, 13:15, 17:15, 20:00, 21:45, lördag) är avstängda
-  men sparade och kan slås på igen. Håll påminnelser och sessioner korta; kör inte flera sessioner i rad när inget hänt.
+- **Påminnelser: AVSTÄNGDA** (användarens beslut 2/11, för att spara användning). Inga schemalagda notiser.
+  Användaren skriver själv när hen vill köra ("CG kör"). Alla schemalagda påminnelser är avstängda men sparade
+  och kan slås på igen om användaren ber om det. Håll sessioner effektiva; kör inte flera i rad när inget hänt.
+  Eftersom ingen bevakar stängningen: sätt stopp som går att följa vid nästa session (sälj vid första session
+  efter en stängning under stoppet).
 - **Inga fasta gränser, inget godkännande** (användarens beslut 22/10): Carl gör alla affärer själv i
   simuleringen. Lärdomarna (t.ex. koncentration i ett tema) är omdöme, inte spärrar. Användarens mål:
   att kunna lita på Carl utan att behöva kolla. Det kräver bevisat resultat i simuleringen först.
